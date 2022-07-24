@@ -50,7 +50,7 @@
                     </div>
                     @csrf
                     @method('put')
-                    <button type="submit" class="btn btn-danger col-4 mt-4" style="margin-left:50%; transform: translateX(-50%);">Edit</button>
+                    <button type="submit" class="btn btn-danger col-4 mt-4" style="margin-left:50%; transform: translateX(-50%)">Edit</button>
                 </form>
                 <p class="card-text"></p>
             </div>

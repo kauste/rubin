@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SalonController;
 use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\MasterController;
 Route::get('/welcome', function () {
     return view('welcome');
 });
+Route::get('/', [FrontController::class, 'salons'])->name('front-salons')->middleware('role:user');
 //salonai
 Route::prefix('salons')->name('salons-')->middleware('role:admin')->group(function () {
     Route::get('/', [SalonController::class, 'index'])->name('index');
@@ -46,5 +48,16 @@ Route::prefix('masters')->name('masters-')->middleware('role:admin')->group(func
     Route::put('/update/{master}', [MasterController::class, 'update'])->name('update');
     Route::delete('/delete/{master}}', [MasterController::class, 'destroy'])->name('delete');
 });
+
+//front
+
+Route::prefix('front')->name('front-')->middleware('role:user')->group(function () {
+    Route::get('/salons', [FrontController::class, 'salons'])->name('salons');
+    Route::get('/services', [FrontController::class, 'procedures'])->name('procedures');
+    Route::get('/masters', [FrontController::class, 'masters'])->name('masters');
+    Route::get('/salon/masters/{salon}', [FrontController::class, 'salonMasters'])->name('salon-masters');
+    Route::get('/{salon}/{id}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
+});
+
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

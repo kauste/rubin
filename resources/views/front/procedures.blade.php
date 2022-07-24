@@ -21,16 +21,6 @@
                             <td>{{$procedure->ruby_service}}</td>
                             <td>{{floor($procedure->minutes / 60)}}h. {{$procedure->minutes - (floor($procedure->minutes / 60))* 60}} min.</td>
                             <td>{{$procedure->price}} eur.</td>
-                            <td class="col-1">
-                                <a href="{{route('procedures-edit', $procedure)}}" class="btn btn-secondary">Edit</a>
-                            </td>
-                            <td class="col-1">
-                                <form action="{{route('procedures-delete', $procedure)}}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
                         </tr>
                         @empty
                         @endforelse

@@ -48,6 +48,7 @@
                         </li>
                         @endif
                         @else
+                        @if(Auth::user()->role > 9)
                         <li class="nav-item dropdown ">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 Salons
@@ -75,23 +76,40 @@
                                 <a class="dropdown-item" href="{{ route('masters-create')}}">Register a new master</a>
                             </div>
                         </li>
-                                          <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
+                        @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) 
+                        <li class="nav-item dropdown ">
+                            <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
+                                Salons
                             </a>
-
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('front-procedures')}}">
+                                    Procedures
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('front-masters')}}">
+                                    Masters
+                                </a>
+                            </li>
+                            @endif
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
                                 </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-                        @endguest
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                            @endguest
                     </ul>
                 </div>
             </div>

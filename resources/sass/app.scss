@@ -42,7 +42,11 @@ input{
     display:flex;
     flex-direction: row !important;
     column-gap: 50px;
-
+}
+.flex-2{
+    display:flex;
+    flex-direction: row !important;
+    column-gap: 10px;
 }
 .master-image{
     padding: 30px;
