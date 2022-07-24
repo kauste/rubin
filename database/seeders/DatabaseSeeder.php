@@ -28,6 +28,11 @@ class DatabaseSeeder extends Seeder
             'city'=> 'Vilnius',
             'telephone_num'=> '62322222'
         ]);
+        DB::table('procedures')->insert([
+            'ruby_service' => 'Bob haircut',
+            'minutes' => '60',
+            'price' => '80.00',
+        ]);
 
     }
 }

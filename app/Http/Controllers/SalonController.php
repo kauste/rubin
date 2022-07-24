@@ -80,7 +80,7 @@ class SalonController extends Controller
         $salon->telephone_num = $request->tel_num;
         $salon->save();
 
-        return redirect()->route('salons-index');
+        return redirect()->route('salons-index')with('message', 'Store is added!');
     }
 
     /**
@@ -158,7 +158,7 @@ class SalonController extends Controller
         $salon->telephone_num = $request->tel_num;
         $salon->save();
 
-        return redirect()->route('salons-index');
+        return redirect()->route('salons-index')->with('message', 'Salon information is edited!');
     }
 
     /**
@@ -171,6 +171,6 @@ class SalonController extends Controller
     {
         $salon->delete();
         
-        return redirect()->route('salons-index');
+        return redirect()->route('salons-index')->with('message', 'Salon is deleted!');
     }
 }

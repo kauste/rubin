@@ -1,3 +1,6 @@
+@if(session('message'))
+<div class="message"> {{session('message')}} </div>
+@endif
  @if ($errors->any())
  <div class="alert">
      <ul class="list-group">

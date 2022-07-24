@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-6 mt-4">
-                                <label for="tel_num">
+                                <label>
                                     <h5>Telephone number</h5>
                                 </label>
                                 <div class="d-flex" style="column-gap:10px; font-size: 20px;">
