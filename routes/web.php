@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SalonController;
 use App\Http\Controllers\ProcedureController;
+use App\Http\Controllers\MasterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,21 +20,31 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 //salonai
-Route::get('/salons', [SalonController::class, 'index'])->name('salons-index');
-Route::get('/salons/create', [SalonController::class, 'create'])->name('salons-create');
-Route::post('/salons/store', [SalonController::class, 'store'])->name('salons-store');
-Route::get('/salons/edit/{salon}', [SalonController::class, 'edit'])->name('salons-edit');
-Route::put('/salons/update/{salon}', [SalonController::class, 'update'])->name('salons-update');
-Route::delete('/salons/delete/{salon}', [SalonController::class, 'destroy'])->name('salons-delete');
-
+Route::prefix('salons')->name('salons-')->middleware('role:admin')->group(function () {
+    Route::get('/', [SalonController::class, 'index'])->name('index');
+    Route::get('/create', [SalonController::class, 'create'])->name('create');
+    Route::post('/store', [SalonController::class, 'store'])->name('store');
+    Route::get('/edit/{salon}', [SalonController::class, 'edit'])->name('edit');
+    Route::put('/update/{salon}', [SalonController::class, 'update'])->name('update');
+    Route::delete('/delete/{salon}', [SalonController::class, 'destroy'])->name('delete');
+});
 //paslaugos
-Route::get('/services', [ProcedureController::class, 'index'])->name('procedures-index');
-Route::get('/services/create', [ProcedureController::class, 'create'])->name('procedures-create');
-Route::post('/services/store', [ProcedureController::class, 'store'])->name('procedures-store');
-Route::get('/services/edit/{procedure}', [ProcedureController::class, 'edit'])->name('procedures-edit');
-Route::put('/services/update/{procedure}', [ProcedureController::class, 'update'])->name('procedures-update');
-Route::delete('/services/delete/{procedure}}', [ProcedureController::class, 'destroy'])->name('procedures-delete');
-
+Route::prefix('services')->name('procedures-')->middleware('role:admin')->group(function () {
+    Route::get('', [ProcedureController::class, 'index'])->name('index');
+    Route::get('/create', [ProcedureController::class, 'create'])->name('create');
+    Route::post('/store', [ProcedureController::class, 'store'])->name('store');
+    Route::get('/edit/{procedure}', [ProcedureController::class, 'edit'])->name('edit');
+    Route::put('/update/{procedure}', [ProcedureController::class, 'update'])->name('update');
+    Route::delete('/delete/{procedure}}', [ProcedureController::class, 'destroy'])->name('delete');
+});
+//meistrai
+Route::prefix('masters')->name('masters-')->middleware('role:admin')->group(function () {
+    Route::get('/', [MasterController::class, 'index'])->name('index');
+    Route::get('/create', [MasterController::class, 'create'])->name('create');
+    Route::post('/store', [MasterController::class, 'store'])->name('store');
+    Route::get('/edit/{master}', [MasterController::class, 'edit'])->name('edit');
+    Route::put('/update/{master}', [MasterController::class, 'update'])->name('update');
+    Route::delete('/delete/{master}}', [MasterController::class, 'destroy'])->name('delete');
+});
 Auth::routes();
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

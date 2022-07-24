@@ -13,7 +13,6 @@
                             </label>
                             <input type="text" name="procedure_title" class="form-control" id="procedure_title" value="{{old('procedure_title')}}">
                         </div>
-
                         <div class="form-group col-md-8 mt-4 center">
                             <label>
                                 <h5>Procedure duration</h5>

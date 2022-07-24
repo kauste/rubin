@@ -25,3 +25,29 @@ input{
     padding: 10px 30px;
     margin: 15px;
 }
+.flex-end-column{
+    display:flex; 
+    flex-direction:column; 
+    justify-content:flex-end; 
+    align-items:center; 
+    row-gap: 15px;
+    margin: 30px;
+}
+.align-center{
+    display:flex; 
+    align-items:center; 
+    row-gap: 15px;
+}
+.flex{
+    display:flex;
+    flex-direction: row !important;
+    column-gap: 50px;
+
+}
+.master-image{
+    padding: 30px;
+    img{
+        height:400px;
+        object-fit: cover;
+    }
+}

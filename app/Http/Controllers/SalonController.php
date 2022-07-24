@@ -13,6 +13,11 @@ class SalonController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         $salons = Salon::all();
@@ -80,7 +85,7 @@ class SalonController extends Controller
         $salon->telephone_num = $request->tel_num;
         $salon->save();
 
-        return redirect()->route('salons-index')with('message', 'Store is added!');
+        return redirect()->route('salons-index')->with('message', 'Store is added!');
     }
 
     /**
