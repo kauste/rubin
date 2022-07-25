@@ -103,7 +103,7 @@ class MasterController extends Controller
      */
     public function edit(Master $master)
     {
-        //
+        return view('back.masters.edit', ['master'=> $master]);
     }
 
     /**
@@ -113,9 +113,45 @@ class MasterController extends Controller
      * @param  \App\Models\Master  $master
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMasterRequest $request, Master $master)
+    public function update(Request $request, Master $master)
     {
-        //
+        $validator = Validator::make($request->all(),
+        [
+            'master_name' => ['required', 'min:3', 'max:50'],
+            'master_name' => ['required', 'min:3', 'max:50'],
+            'master_image.*' => 'required',
+            'master_image.*' => [ 'image|mimes:jpg,gif,svg,jpeg,png', 'max:2048'],
+            'salon_id'=> 'numeric',
+
+        ],
+        [
+            'master_name.required' => 'Master name is required!',
+            'master_name.min' => 'Master name should be at least 3 symbols length!',
+            'master_name.max' => 'Master name should not exceed 50 symbols!',
+            'master_surname.required' => 'Master surname is required!',
+            'master_surname.min' => 'Master surname should be at least 3 symbols length!',
+            'master_surname.max' => 'Master surname should not exceed 50 symbols!',
+            'master_image.max' => 'Picture name should not exceed 100 symbols!',
+        ]
+        );
+
+       if ($validator->fails()) {
+           $request->flash();
+           return redirect()->back()->withErrors($validator);
+       }
+
+       $name = md5($request->id).'_'. $request->name . $request->surname;
+       $destinationPath = public_path('img/');
+        $images = $request->file('image')->move($destinationPath, $name);
+    
+   
+        $master->name = $request->master_name;
+        $master->surname = $request->master_surname;
+        $master->file_path = $name;
+        $master->salon_id = $request->salon_id;
+        $master->save();
+
+        return redirect()->route('masters-index')->with('message', 'Master is added!');
     }
 
     /**
