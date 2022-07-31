@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Master;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -13,15 +15,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('procedures', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('ruby_service', 50);
-            $table->unsignedInteger('minutes');
-            $table->unsignedDecimal('price', $precision = 5, $scale = 2);
-            // $table->unsignedBigInteger('master_id');
-            // $table->foreign('master_id')->references('id')->on('masters');
+            $table->string('comment', 1000);
+            $table->foreignIdFor(Master::class);
+            $table->foreignIdFor(User::class);
             $table->timestamps();
         });
+
+      
     }
 
     /**
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('procedures');
+        Schema::dropIfExists('comments');
     }
 };

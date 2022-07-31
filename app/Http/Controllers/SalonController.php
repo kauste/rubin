@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Salon;
 use Illuminate\Http\Request;
 use Validator;
+use DB;
 
 class SalonController extends Controller
 {
@@ -162,7 +163,7 @@ class SalonController extends Controller
         $salon->flat_number = $request->flat_num;
         $salon->telephone_num = $request->tel_num;
         $salon->save();
-
+       
         return redirect()->route('salons-index')->with('message', 'Salon information is edited!');
     }
 
@@ -174,8 +175,10 @@ class SalonController extends Controller
      */
     public function destroy(Request $request, Salon $salon)
     {
-        $salon->delete();
-        
-        return redirect()->route('salons-index')->with('message', 'Salon is deleted!');
+        if(!$salon->masters->count()){
+            $salon->delete();
+            return redirect()->route('salons-index')->with('message', 'Salon is deleted!');
+        }
+        return redirect()->route('salons-index')->with('message', 'Salon cannot be deleted, cause some clients are waiting for a visit!');
     }
 }

@@ -11,7 +11,7 @@
                     <b>{{$salon->name}}</b>
                 </h4>
                 <p class="card-text mb-1">Adress: {{$salon->street}} str. {{$salon->street_number}}@if($salon->flat_number)-{{$salon->flat_number}}@endif, {{$salon->city}}</p>
-                <p class="card-text">Tel num: +370 {{substr("$salon->telephone_num", 0, 3)}} {{substr("$salon->telephone_num", 3, 8)}}</p>
+                <p class="card-text">Tel num: +370 {{$salon->telephone_num}}</p>
                 <a class="btn btn-secondary" href="{{route('front-salons')}}">Go back to list of salons</a>
             </div>
             <div class="card-body text-body">
@@ -26,7 +26,7 @@
                             <p class="card-text">At the moment is working in <b>{{$master->salon_name}}</b>.</p>
                         </div>
                         <div class="flex-end-column col-3">
-                            <a href="{{route('front-salon-master', [$salon, $master->master_id])}}" class="btn btn-danger">Choose this master</a>
+                            <a href="{{route('front-salon-master', $master->master_id)}}" class="btn btn-danger">Choose this master</a>
                         </div>
                     </div>
                 </div>

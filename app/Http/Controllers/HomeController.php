@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Auth;
+use App\Models\Salon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +24,17 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (Auth::user()->role > 9) {
+            $salons = Salon::all();
+            return view('back.salons.index', ['salons'=> $salons]);
+        }
+        if (Auth::user()->role < 9 && Auth::user()->role >= 1) {
+            $salons = Salon::all();
+            return view('front.salons', ['salons' => $salons]);
+        }
+        if (Auth::user()->role < 1) {
+            return view('auth.login');
+        }
+        
     }
 }

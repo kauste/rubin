@@ -8,11 +8,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <script>
+        const nextMonthUrl = "{{route('next-month')}}";
+        const previousMonthUrl = "{{route('previous-month')}}";
+        const dayUrl = "{{route('show-day')}}";
+    </script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 </head>
 <body>
@@ -76,8 +83,7 @@
                                 <a class="dropdown-item" href="{{ route('masters-create')}}">Register a new master</a>
                             </div>
                         </li>
-                        @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) 
-                        <li class="nav-item dropdown ">
+                        @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) <li class="nav-item dropdown ">
                             <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
                                 Salons
                             </a>

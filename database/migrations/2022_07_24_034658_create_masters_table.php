@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('name', 50);
             $table->string('surname', 50);
-            $table->string('file_path', 100);
+            $table->string('file_path', 200);
             $table->unsignedBigInteger('salon_id');
             $table->foreign('salon_id')->references('id')->on('salons');
+            $table->unsignedTinyInteger('evaluations')->default(10);
             $table->timestamps();
         });
     }

@@ -23,7 +23,7 @@
                             <label for="image">
                                 <h5>Image</h5>
                             </label>
-                            <input type="file" name="image" class="form-control" id="image">
+                            <input type="file" name="image" accept="image/png, image/jpg, image/jpeg" class="form-control" id="image">
                         </div>
                         <div class="form-group col-md-12 mb-4">
                             <label for="master_salon">
@@ -37,7 +37,6 @@
                                 @empty
                                 <div class="text-danger"><b>No salons added at the moment. If you want to register new paster, please, register the salon first.</b></div>
                                 @endforelse
-                            
                         </div>
                     </div>
                     @csrf

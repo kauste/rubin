@@ -2,7 +2,7 @@
 @section('content')
 <div class="container col-8 mt-5">
     <div class="row">
-        @forelse ($salons as $salon)
+        @forelse ($salons as $key => $salon)
 
         <div class="card border-danger mb-3 m-3" style="max-width: 18rem;">
             <h4 class="card-header text-body">

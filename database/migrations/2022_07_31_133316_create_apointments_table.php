@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('procedures', function (Blueprint $table) {
+        Schema::create('apointments', function (Blueprint $table) {
             $table->id();
-            $table->string('ruby_service', 50);
-            $table->unsignedInteger('minutes');
-            $table->unsignedDecimal('price', $precision = 5, $scale = 2);
-            // $table->unsignedBigInteger('master_id');
-            // $table->foreign('master_id')->references('id')->on('masters');
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('procedures');
+        Schema::dropIfExists('apointments');
     }
 };

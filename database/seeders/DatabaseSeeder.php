@@ -13,7 +13,9 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+  
     public function run(){
+        $asset = asset('img');
         DB::table('salons')->insert([
             'name' => 'Ruby Black',
             'street' => 'Vienos',
@@ -70,37 +72,37 @@ class DatabaseSeeder extends Seeder
         DB::table('masters')->insert([
             'name' => 'Kamile',
             'surname' => 'Kiskyte',
-            'file_path' => 'kamile.jpg',
+            'file_path' => $asset . '/kamile.jpg',
             'salon_id' => 1,
         ]);
         DB::table('masters')->insert([
             'name' => 'Ievute',
             'surname' => 'Raja',
-            'file_path' => 'ievute.jpg',
+            'file_path' => $asset . '/ievute.jpg',
             'salon_id' => 1,
         ]);
         DB::table('masters')->insert([
             'name' => 'Evelina',
             'surname' => 'Ever',
-            'file_path' => 'evelina.jpg',
+            'file_path' => $asset . '/evelina.jpg',
             'salon_id' => 2,
         ]);
         DB::table('masters')->insert([
             'name' => 'Rugile',
             'surname' => 'Stasionyte',
-            'file_path' => 'rugile.jpg',
+            'file_path' => $asset. '/rugile.jpg',
             'salon_id' => 2,
         ]);
         DB::table('masters')->insert([
             'name' => 'Raminta',
             'surname' => 'Bebenčiūtė',
-            'file_path' => 'raminta.jpg',
+            'file_path' => $asset . '/raminta.jpg',
             'salon_id' => 3,
         ]);
         DB::table('masters')->insert([
             'name' => 'Ieva',
             'surname' => 'Čigonaitė',
-            'file_path' => 'ieva.jpg',
+            'file_path' => $asset . '/ieva.jpg',
             'salon_id' => 3,
         ]);
         DB::table('users')->insert([

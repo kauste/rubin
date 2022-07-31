@@ -6,6 +6,7 @@ use App\Models\Master;
 use App\Models\Salon;
 use Illuminate\Http\Request;
 use Validator;
+use Image;
 
 class MasterController extends Controller
 {
@@ -22,7 +23,8 @@ class MasterController extends Controller
     public function index()
     {
         $masters = Master::all();
-        return view('back.masters.index', ['masters' => $masters]);
+        $salons = Salon::all();
+        return view('back.masters.index', ['masters' => $masters, 'salons'=> $salons]);
     }
 
     /**
@@ -48,8 +50,8 @@ class MasterController extends Controller
         [
             'master_name' => ['required', 'min:3', 'max:50'],
             'master_name' => ['required', 'min:3', 'max:50'],
-            'master_image.*' => 'required',
-            'master_image.*' => [ 'image|mimes:jpg,gif,svg,jpeg,png', 'max:2048'],
+            'image.*' => 'required',
+            'image.*' => [ 'image|mimes:jpg,gif,svg,jpeg,png', 'max:2048'],
             'salon_id'=> 'numeric',
 
         ],
@@ -60,7 +62,7 @@ class MasterController extends Controller
             'master_surname.required' => 'Master surname is required!',
             'master_surname.min' => 'Master surname should be at least 3 symbols length!',
             'master_surname.max' => 'Master surname should not exceed 50 symbols!',
-            'master_image.max' => 'Picture name should not exceed 100 symbols!',
+            'image.max' => 'Picture name should not exceed 100 symbols!',
         ]
         );
 
@@ -68,16 +70,24 @@ class MasterController extends Controller
            $request->flash();
            return redirect()->back()->withErrors($validator);
        }
+       if(!$request->image){
+        return redirect()->back()->with('message', 'Picture is required!');
+    }
 
-       $name = md5($request->id).'_'. $request->name . $request->surname;
-       $destinationPath = public_path('img/');
-        $images = $request->file('image')->move($destinationPath, $name);
-    
-   
+    $image = $request->file('image');
+    $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+    $ext  = $image-> getClientOriginalExtension();
+    $file = $name . '-' . md5($name) . '.' . $ext;
+    $img = Image::make($image);
+    $img->save(public_path('img/'). $file);
+    //    $name = md5($request->id).'_'. $request->master_name . $request->$master_surname;
+    //    $destinationPath = public_path('img/');
+    //     $images = $request->file('image')->move($destinationPath, $name);
+
         $master = New Master;
         $master->name = $request->master_name;
         $master->surname = $request->master_surname;
-        $master->file_path = $name;
+        $master->file_path = asset('img'). '/'. $file;
         $master->salon_id = $request->salon_id;
         $master->save();
 
@@ -103,7 +113,8 @@ class MasterController extends Controller
      */
     public function edit(Master $master)
     {
-        return view('back.masters.edit', ['master'=> $master]);
+        $salons = Salon::all();
+        return view('back.masters.edit', ['master'=> $master, 'salons'=> $salons]);
     }
 
     /**
@@ -115,12 +126,13 @@ class MasterController extends Controller
      */
     public function update(Request $request, Master $master)
     {
+        
         $validator = Validator::make($request->all(),
         [
             'master_name' => ['required', 'min:3', 'max:50'],
             'master_name' => ['required', 'min:3', 'max:50'],
-            'master_image.*' => 'required',
-            'master_image.*' => [ 'image|mimes:jpg,gif,svg,jpeg,png', 'max:2048'],
+            
+            'image' => [ 'mimes:jpg,gif,svg,jpeg,png', 'max:2048'],
             'salon_id'=> 'numeric',
 
         ],
@@ -131,7 +143,7 @@ class MasterController extends Controller
             'master_surname.required' => 'Master surname is required!',
             'master_surname.min' => 'Master surname should be at least 3 symbols length!',
             'master_surname.max' => 'Master surname should not exceed 50 symbols!',
-            'master_image.max' => 'Picture name should not exceed 100 symbols!',
+            'image.max' => 'Picture name should not exceed 100 symbols!',
         ]
         );
 
@@ -139,19 +151,36 @@ class MasterController extends Controller
            $request->flash();
            return redirect()->back()->withErrors($validator);
        }
-
-       $name = md5($request->id).'_'. $request->name . $request->surname;
-       $destinationPath = public_path('img/');
-        $images = $request->file('image')->move($destinationPath, $name);
+       
+    
+        if($request->image){
+            //istrinam nuotrauka is publicku
+            $pic_asset = $master->file_path;
+            $name = pathinfo($pic_asset, PATHINFO_FILENAME);
+            $ext = pathinfo($pic_asset, PATHINFO_EXTENSION);
+            $pic_path = public_path() . '/img/'. $name . '.' .$ext;
+            
+            if (file_exists($pic_path)) {
+                unlink($pic_path);
+            }
+            //idedam nauja
+            $image = $request->file('image');
+            $name = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            $ext  = $image-> getClientOriginalExtension();
+            $file = $name . '-' . md5($name) . '.' . $ext;
+            $img = Image::make($image);
+            $img->save(public_path('img/'). $file);
+            //linkas i duombaze
+            $master->file_path = asset('img'). '/'. $file;
+    }
     
    
         $master->name = $request->master_name;
         $master->surname = $request->master_surname;
-        $master->file_path = $name;
         $master->salon_id = $request->salon_id;
         $master->save();
 
-        return redirect()->route('masters-index')->with('message', 'Master is added!');
+        return redirect()->route('masters-index')->with('message', 'Information about master is edited!');
     }
 
     /**
@@ -162,7 +191,17 @@ class MasterController extends Controller
      */
     public function destroy(Master $master)
     {
-        $master->delete();
-        return redirect()->route('masters-index')->with('message','Master was deleted!');
+        // if(!$master->procedures->count()){
+            $pic_asset = $master->file_path;
+            $name = pathinfo($pic_asset, PATHINFO_FILENAME);
+            $ext = pathinfo($pic_asset, PATHINFO_EXTENSION);
+            $pic_path = public_path() . '/img/'. $name . '.' .$ext;
+            if (file_exists($pic_path)) {
+                unlink($pic_path);
+            }
+            $master->delete();
+            return redirect()->route('masters-index')->with('message','Master was deleted!');
+        // }
+        // return redirect()->back()->with('message','Master cannot be deleted, there is appointments booked for him!');
     }
 }

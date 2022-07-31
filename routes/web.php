@@ -5,6 +5,11 @@ use App\Http\Controllers\SalonController;
 use App\Http\Controllers\ProcedureController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CallendarController;
+
+
+use App\Models\Comment;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +25,13 @@ use App\Http\Controllers\FrontController;
 Route::get('/welcome', function () {
     return view('welcome');
 });
-Route::get('/', [FrontController::class, 'salons'])->name('front-salons')->middleware('role:user');
+
+//Login
+
+Route::get('/hello/{master}', function()
+{
+    return View::make('front.comments.index', ['comments'=> Comment::all(), 'master' =>$master]);
+});
 //salonai
 Route::prefix('salons')->name('salons-')->middleware('role:admin')->group(function () {
     Route::get('/', [SalonController::class, 'index'])->name('index');
@@ -52,12 +63,20 @@ Route::prefix('masters')->name('masters-')->middleware('role:admin')->group(func
 //front
 
 Route::prefix('front')->name('front-')->middleware('role:user')->group(function () {
-    Route::get('/salons', [FrontController::class, 'salons'])->name('salons');
-    Route::get('/services', [FrontController::class, 'procedures'])->name('procedures');
-    Route::get('/masters', [FrontController::class, 'masters'])->name('masters');
-    Route::get('/salon/masters/{salon}', [FrontController::class, 'salonMasters'])->name('salon-masters');
-    Route::get('/{salon}/{id}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
+    Route::get('salons', [FrontController::class, 'salons'])->name('salons');
+    Route::get('services', [FrontController::class, 'procedures'])->name('procedures');
+    Route::get('masters', [FrontController::class, 'masters'])->name('masters');
+    Route::get('salon/masters/{id}', [FrontController::class, 'salonMasters'])->name('salon-masters');
+    Route::get('{id}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
+    Route::get('comments/list/{id}', [CommentController::class, 'index'])->name('comments-list');
+    Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
 });
 
+//for javascript
+Route::post('next-month/', [CallendarController::class, 'nextMonth'])->name('next-month');
+Route::post('previous-month/', [CallendarController::class, 'previousMonth'])->name('previous-month');
+Route::post('day', [CallendarController::class, 'showDay'])->name('show-day');
+
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');

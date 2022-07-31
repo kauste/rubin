@@ -55,3 +55,50 @@ input{
         object-fit: cover;
     }
 }
+.flex-end{
+    display:flex; 
+    justify-content:flex-end;
+}
+.callendar-blade{
+    display: flex;
+    width:50%;
+    flex-direction: column;
+    align-items: center;
+   .card-header{
+        div{
+            text-align: center;
+        }
+   }
+    .callendar-controls{
+        display: flex;
+        justify-content: center;
+        column-gap: 30px;
+        h4{
+            font-size:22px;
+            font-weight: 600;
+        }
+        span{
+            cursor: pointer;
+        }
+    }
+}
+.callendar-row{
+    .callendar{
+        width:50%;
+        button{
+            height:50px;
+            width:50px;
+            border:solid 1px rgb(212, 211, 211);
+        }
+    }
+}
+.no-hover{
+    cursor: not-allowed !important;
+
+}
+.callendar-day{
+    height:120px;
+    width:100px;
+    border: solid 1px #DC3545;
+    box-shadow: 2px 3px 8px #DC3545;;
+}
