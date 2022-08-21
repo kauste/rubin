@@ -12,6 +12,10 @@
         const nextMonthUrl = "{{route('next-month')}}";
         const previousMonthUrl = "{{route('previous-month')}}";
         const dayUrl = "{{route('show-day')}}";
+        const addToCartUrl = "{{route('add-to-cart')}}";
+        const showNavCartUrl = "{{route('show-nav-cart')}}";
+        const makeOrderUrl = "{{route('make-order')}}";
+
     </script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- Fonts -->
@@ -114,6 +118,11 @@
                                         @csrf
                                     </form>
                                 </div>
+                            </li>
+                            <li class="nav-item dropdown nav--cart">
+                            </li>
+                            <li>
+                            
                             </li>
                             @endguest
                     </ul>

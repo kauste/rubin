@@ -20,6 +20,21 @@
                             <a href="{{route('front-salon-masters', $salon->id)}}" class="btn btn-outline-danger">Go back to this salon masters</a>
                         </div>
                     </div>
+                          <div class="mb-3">
+                        <div class="flex">
+                        <label for="comment">Rating: {{$rating}}</label>
+                        <form class="rating-form"method="post" action="{{route('front-rate', $master)}}">
+                        @for($i = 1; $i < 6; $i++)
+                        <div class="rating-item">
+                        <input class="rating-input"type="radio" id="rating-{{$i}}" name="rating" value="{{$i}}" />
+                        <label for="rating-{{$i}}">{{$i}}</label>
+                        </div>
+                        @endfor
+                        @csrf
+                        <button class="btn btn-danger">Rate</button>
+                        </form>
+                        </div>
+                        </div>
                     <div class="mb-3">
                         <div class="flex">
                             <form method="post" action="{{route('front-comment-store', $master->id)}}">
@@ -36,40 +51,43 @@
                 </div>
             </div>
             <div class="callendar--include">
-            @include('parts.callendar')
+                @include('parts.callendar')
             </div>
-            <h4 class="card-header text-body">
-                <b>Services</b>
-            </h4>
-            <div class="card-body text-body">
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col-4">Service</th>
-                            <th scope="col-3">Duration</th>
-                            <th scope="col-3">Price</th>
-                            <th class="flex-end" scope="col-2">Amount</th>
-                            <th scope="col-1"></th>
+            <div>
+                <h4 class="card-header text-body">
+                    <b>Services</b>
+                </h4>
+                <div class="card-body text-body">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col-3">Service</th>
+                                <th scope="col-2">Duration</th>
+                                <th scope="col-5">Price</th>
+                                <th scope="col-5">Apointment time</th>
+                            </tr>
+                        </thead>
+                        @forelse ($procedures as $procedure)
+                        <tr valign="middle">
+                            <thead class="appointment--form">
+                                <td><label class="procedure--id" data-procedure-id="{{$procedure->id}}" for="{{$procedure->ruby_service}}">{{$procedure->ruby_service}}</label></td>
+                                <td>{{floor($procedure->minutes / 60)}}h. {{$procedure->minutes - (floor($procedure->minutes / 60))* 60}} min.</td>
+                                <td>{{$procedure->price}} eur.</td>
+                                <td>
+                                    <input class="col-2 p-1 appointment--year" type="number" min="2022" step="1" placeholder="Year" required>
+                                    <input class="col-2 p-1 appointment--month" type="number" min="1" max="12" step="1" required placeholder="Month">
+                                    <input class="col-2 p-1 appointment--day" type="number" min="1" max="31" step="1" required placeholder="Day">
+                                    <input class="col-2 p-1 appointment--hour" type="number" min="10" max="19" step="1" required placeholder="Hour">
+                                    <input class="col-2 p-1 appointment--minute" type="number" min="0" max="30" step="30" required placeholder="Minute">
+                                </td>
+                                <td><button type="submit" class="btn btn-danger col-12 add--to--cart">Add to cart</button></td>
+                            </thead>
                         </tr>
-                    </thead>
-                    @forelse ($procedures as $procedure)
-                    <tr valign="middle">
-                        <form action="" method="post">
-                            <td><label for="{{$procedure->ruby_service}}">{{$procedure->ruby_service}}</label></td>
-                            <td>{{floor($procedure->minutes / 60)}}h. {{$procedure->minutes - (floor($procedure->minutes / 60))* 60}} min.</td>
-                            <td>{{$procedure->price}} eur.</td>
-
-                            <td class="flex-end"><input class="col-3" type="number" min="0" step="1"></td>
-                            @csrf
-                            @method('post')
-                            <td><button type="submit" class="btn btn-danger col-12">Add to cart</button></td>
-
-                        </form>
-                    </tr>
-                    @empty
-                    <div>We are sorry, at the moment there is no services we can offer for you.</div>
-                    @endforelse
-                </table>
+                        @empty
+                        <div>We are sorry, at the moment there is no services we can offer for you.</div>
+                        @endforelse
+                    </table>
+                </div>
             </div>
         </div>
     </div>

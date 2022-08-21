@@ -13,16 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('apointments', function (Blueprint $table) {
+        Schema::create('ratings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('procedure_id');
-            $table->foreign('procedure_id')->references('id')->on('procedures');
-            $table->unsignedBigInteger('master_id');
-            $table->foreign('master_id')->references('id')->on('masters');
+            $table->unsignedTinyInteger('rate');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->date('appointment_start');
-            $table->date('appointment_end');
+            $table->unsignedBigInteger('master_id');
+            $table->foreign('master_id')->references('id')->on('masters');
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('apointments');
+        Schema::dropIfExists('ratings');
     }
 };

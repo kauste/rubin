@@ -18,7 +18,7 @@
                 @forelse ($masters as $master)
                 <div class="card col-12 flex mb-5">
                     <div class="master-image bg-danger col-5">
-                        <img src="{{ asset('img/'.$master->file_path) }}" class="card-img-top" alt="{{$master->salon_name}}"></img>
+                        <img src="{{$master->file_path}}" class="card-img-top" alt="{{$master->salon_name}}"></img>
                     </div>
                     <div class="card-body align-center col-7">
                         <div>

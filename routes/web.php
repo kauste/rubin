@@ -7,6 +7,8 @@ use App\Http\Controllers\MasterController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CallendarController;
+use App\Http\Controllers\ApointmentController;
+use App\Http\Controllers\RatingController;
 
 
 use App\Models\Comment;
@@ -70,12 +72,19 @@ Route::prefix('front')->name('front-')->middleware('role:user')->group(function 
     Route::get('{id}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
     Route::get('comments/list/{id}', [CommentController::class, 'index'])->name('comments-list');
     Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
+    Route::post('rate/{master}', [RatingController::class, 'rate'])->name('rate');
+    
 });
+Route::get('my-order', [ApointmentController::class, 'showMyOrder'])->name('my-order');
+Route::delete('client-delete-appointment/{id}', [ApointmentController::class, 'clientDeleteAppointment'])->name('client-delete-appointment');
 
 //for javascript
 Route::post('next-month/', [CallendarController::class, 'nextMonth'])->name('next-month');
 Route::post('previous-month/', [CallendarController::class, 'previousMonth'])->name('previous-month');
 Route::post('day', [CallendarController::class, 'showDay'])->name('show-day');
+Route::post('add-to-cart', [ApointmentController::class, 'addToCart'])->name('add-to-cart');
+Route::get('show-nav-cart', [ApointmentController::class, 'showNavCart'])->name('show-nav-cart');
+Route::post('make-order', [ApointmentController::class, 'store'])->name('make-order');
 
 Auth::routes();
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');

@@ -7,6 +7,7 @@ use App\Models\Front;
 use App\Models\Salon;
 use App\Models\Master;
 use App\Models\Procedure;
+use App\Models\Rating;
 use DB;
 use Carbon\Carbon;
 class FrontController extends Controller
@@ -80,6 +81,9 @@ class FrontController extends Controller
         }while($tempDate->month == $today->month);
         //kiti duomenys
         $today = $today->toArray();
+
+        $rating = round(Rating::where('master_id', $request->id)->avg('rate'), 2);
+        
         return view('front.masterProcedures', [
           'procedures'=> $procedures, 
           'master'=> $master, 
@@ -89,6 +93,7 @@ class FrontController extends Controller
           'monthNum'=> $monthNum,
           'todayDay'=> $today,
           'year' => $year,
+          'rating'=> $rating,
         ]);
   }
 }

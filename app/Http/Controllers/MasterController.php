@@ -80,9 +80,7 @@ class MasterController extends Controller
     $file = $name . '-' . md5($name) . '.' . $ext;
     $img = Image::make($image);
     $img->save(public_path('img/'). $file);
-    //    $name = md5($request->id).'_'. $request->master_name . $request->$master_surname;
-    //    $destinationPath = public_path('img/');
-    //     $images = $request->file('image')->move($destinationPath, $name);
+
 
         $master = New Master;
         $master->name = $request->master_name;
