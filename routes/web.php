@@ -72,7 +72,7 @@ Route::prefix('front')->name('front-')->middleware('role:user')->group(function 
     Route::get('{id}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
     Route::get('comments/list/{id}', [CommentController::class, 'index'])->name('comments-list');
     Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
-    Route::post('rate/{master}', [RatingController::class, 'rate'])->name('rate');
+    Route::post('rate', [RatingController::class, 'rate'])->name('rate');
     
 });
 Route::get('my-order', [ApointmentController::class, 'showMyOrder'])->name('my-order');

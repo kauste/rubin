@@ -5,7 +5,7 @@
         <div class="card border-danger mb-3 m-3 p-3">
             <div class="card col-12 flex mb-5">
                 <div class="master-image bg-danger col-5">
-                    <img src="{{ asset('img/'.$master->file_path) }}" class="card-img-top" alt="{{$master->salon_name}}"></img>
+                    <img src="{{$master->file_path}}" class="card-img-top" alt="{{$master->salon_name}}"></img>
                 </div>
                 <div class="card-body align-center d-block">
                     <div class="d-flex mt-5 mb-2">

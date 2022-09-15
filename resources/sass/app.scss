@@ -129,3 +129,13 @@ input{
 .rating-input{
     display:block;
 }
+.rating-star{
+    height:18px;
+    width:18px;
+    fill:white
+}
+
+.rating-star:hover {
+    cursor: pointer;
+    // fill:yellow;
+}

@@ -17,28 +17,46 @@ const cartUpdate = () => {
     }
     
  })
- document.querySelectorAll('.add--to--cart')
- .forEach(button => {
-    button.addEventListener('click', ()=>{
-    const form = button.closest('thead');
-    const masterId = document.querySelector('[name=master_id]').value;
-    const appointment = {
-        'procedureId':form.querySelector('.procedure--id').dataset.procedureId,
-        'year': form.querySelector('.appointment--year').value,
-        'month': form.querySelector('.appointment--month').value,
-        'day': form.querySelector('.appointment--day').value,
-        'hour': form.querySelector('.appointment--hour').value,
-        'minute': form.querySelector('.appointment--minute').value,
-    }
-    axios.post(addToCartUrl, {masterId, appointment})
-    .then(res => {
+ if(document.querySelector('.procedure--chosen')){
+     
+     const procedureChosen = document.querySelector('.procedure--chosen');
+     const backToProceduresBtn = document.querySelector('.back--to--procedures');
+     procedureChosen.addEventListener('click', () => {
         const msg = document.querySelector('.message--javascript');
-        msg.classList.add('message');
-        msg.innerText = res.data.message;
-         cartUpdate();
-        })
+        const procedureId = document.querySelector('input[name="procedure"]:checked')?.value;
+        const label = document.querySelector('label[for="' + procedureId + '"]');
+        const serviceBox = document.querySelector('.service--box');
+        const callendarBox = document.querySelector('.callendar--box');
+        const callendarHeader = callendarBox.querySelector('h4>b');
+        const callendarBtnBox= document.querySelector('.callendar--btn--box');
+        if(procedureId == null){
+            msg.classList.add('message');
+            msg.innerText = 'You did not choose procedure. Please choose from the list.';
+        } else{
+            msg.innerText = '';
+            msg.classList.remove('message');
+            serviceBox.classList.add('d-none');
+            callendarBox.classList.remove('d-none');
+            callendarBtnBox.classList.remove('d-none');
+            callendarBtnBox.classList.add('rating-form');
+            callendarHeader.innerText = label.innerText;
+        }
+    });
+
+    backToProceduresBtn.addEventListener('click', () => {
+        const serviceBox = document.querySelector('.service--box');
+        const callendarBox = document.querySelector('.callendar--box');
+        const callendarHeader = callendarBox.querySelector('h4>b');
+        const callendarBtnBox= document.querySelector('.callendar--btn--box');
+
+        serviceBox.classList.remove('d-none');
+        callendarBox.classList.add('d-none');
+        callendarBtnBox.classList.add('d-none');
+        callendarBtnBox.classList.remove('rating-form');
+        callendarHeader.innerText = '';
     })
- })
+
+ }
  if(document.querySelector('.order--appointments')){
     document.querySelector('.order--appointments')
     .addEventListener('click', () => {
@@ -102,15 +120,36 @@ const cartUpdate = () => {
         document.querySelectorAll('.week--day')
          .forEach(b => {
             b.addEventListener('click', () => {
-                const data = b.dataset.timeData;
-                axios.post(dayUrl, {data})
+                const date = b.dataset.timeData;
+                const masterId = document.querySelector('[name="master_id"]').value;
+                const procedureId = document.querySelector('input[name="procedure"]:checked').value;
+                axios.post(dayUrl, {date, masterId, procedureId})
                 .then(res => {           
                     document.querySelector('.day--appointments').innerHTML = res.data.html;
+                    addToCart();
                 })
             })
          })
         }
-
+    const addToCart = () => {
+        const addToCartBtn = document.querySelector('.add--to--cart');
+        const masterId = document.querySelector('[name=master_id]').value;
+        addToCartBtn.addEventListener('click', () => {
+            const appintmentRadioBtn = document.querySelector('input[name="free-time"]:checked');
+            const appointmenTime = appintmentRadioBtn.closest('thead');
+            const appointment = {
+                'procedureId': document.querySelector('input[name="procedure"]:checked').value,
+                'dateTime': document.querySelector('.appointment--date').innerText + ' ' + appointmenTime.querySelector('.appointment--starts').innerText,
+            }
+            axios.post(addToCartUrl, {masterId, appointment})
+           .then(res => {
+            const msg = document.querySelector('.message--javascript');
+            msg.classList.add('message');
+            msg.innerText = res.data.message;
+            cartUpdate();
+           })
+        })
+    }
         
     window.addEventListener('load', () => {
         onNext();
@@ -118,7 +157,35 @@ const cartUpdate = () => {
         setDayEvents();
         
     })
+ }
 
+ if(document.querySelector('.rating--star')){
+    const ratingStars = document.querySelectorAll('.rating--star');
 
-
+    for(let i = 0; i < ratingStars.length; i++){
+        for(let j = 0; j <= i; j++){
+        ratingStars[i].addEventListener('mouseenter', ()=> {
+                ratingStars[j].style.fill = 'yellow';
+            })
+            ratingStars[i].addEventListener('mouseleave', ()=> {
+                ratingStars[j].style.fill = 'white';
+            })
+        }
+    }
+        
+    ratingStars.forEach((ratingStar) => {
+        ratingStar.addEventListener('click', () => {
+            const rating = ratingStar.dataset.rating;
+            const masterId = document.querySelector("[name='master_id']").value;
+            axios.post(rateUrl, {rating, masterId})
+            .then(res => {
+                const ratingNum = document.querySelector('.rating--sum>b');
+                const msg = document.querySelector('.message--javascript');
+                ratingNum.innerText = res.data.newRating;
+                msg.classList.add('message');
+                msg.innerText = res.data.message;
+            })
+        })
+    })
+   
  }

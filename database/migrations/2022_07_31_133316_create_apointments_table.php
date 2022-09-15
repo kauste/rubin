@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreign('master_id')->references('id')->on('masters');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->date('appointment_start');
-            $table->date('appointment_end');
+            $table->dateTime('appointment_start');
+            $table->dateTime('appointment_end');
             $table->timestamps();
         });
     }

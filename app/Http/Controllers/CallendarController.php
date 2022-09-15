@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Apointment;
+use App\Models\Procedure;
 use Carbon\Carbon;
 
 class CallendarController extends Controller
@@ -85,17 +87,51 @@ class CallendarController extends Controller
         ]);
     }
     public function showDay(Request $request){
-        $scheduleTime = [];
-        $i = 0;
-        do{
-            $min = $i * 30;
-            $i++;
-            $date = Carbon::parse('10:00')->addMinutes($min)->format('H:i');
-            $scheduleTime[] = $date;
-        }while($date != '19:30');
-       
-        $html = view('parts.day')->with(['data' =>$request->data, 'scheduleTime'=> $scheduleTime])->render();
-    
+        $procedureDuration = Procedure::where('id', $request->procedureId)
+                            ->select('minutes')
+                            ->first()->minutes;
+
+        $appointments = Apointment::where('master_id', $request->masterId)
+                    ->whereDate('appointment_start', $request->date)
+                    ->orderBy('appointment_start', 'asc')
+                    ->select('appointment_start', 'appointment_end')
+                    ->get();
+        $freeTimeStarts = Carbon::parse('10:00')->format('H:i');
+        $freeTimeEnds = Carbon::parse('20:00')->format('H:i');
+        $freeTimes = [];
+        if(count($appointments) == 0){
+            $freeTimes[] = [$freeTimeStarts, $freeTimeEnds];
+        } else {
+            foreach($appointments as $appointment){
+               $appointmentStart = Carbon::parse($appointment['appointment_start'])->format('H:i');
+               $appointmentEnds = Carbon::parse($appointment['appointment_end'])->format('H:i');
+                if($appointmentStart == $freeTimeStarts){
+                    $freeTimeStarts = $appointmentEnds;
+                }
+                else {
+                    $freeTimes[] = [$freeTimeStarts, $appointmentStart];
+                    $freeTimeStarts = $appointmentEnds;
+                }
+             }
+             if($freeTimeStarts != $freeTimeEnds){
+                $freeTimes[] = [$freeTimeStarts, $freeTimeEnds];
+             }
+        }
+        $appointmentTimes = [];
+        foreach($freeTimes as $freeTime){
+            $endTimeCarbon = Carbon::createFromTimeString($freeTime[1]);
+            $timeCarbon = Carbon::createFromTimeString($freeTime[0]);
+            
+            while($endTimeCarbon >= $timeCarbon->addMinutes($procedureDuration)){
+                $thisEnds = $timeCarbon->format('H:i');
+                $thisStarts = $timeCarbon->subMinutes($procedureDuration)->format('H:i');
+                $appointmentTimes[] = [$thisStarts, $thisEnds];
+                
+                $timeCarbon->addMinutes(30)->format('H:i');
+             };
+        }
+
+        $html = view('parts.day')->with(['date' =>$request->date, 'freeTimes' => $freeTimes, 'appointmentTimes'=> $appointmentTimes])->render();
   
         return response()->json([
             'html'=> $html,

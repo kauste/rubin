@@ -34,6 +34,11 @@
                                     && $todayDay['day'] ==$day[0]) 
                                     bg-danger 
                                 @endif 
+                                 @if($todayDay['year'] > $year 
+                                    || $todayDay['month'] > $monthNum
+                                    || $todayDay['day'] > $day[0]) 
+                                    no-hover
+                                @endif 
                                 @if (!is_int($key / 7) && !is_int(($key + 1) / 7)) week--day  @endif
                                 @if (is_int($key / 7)) bg-warning  no-hover @endif
                                 @if (is_int(($key + 1)/ 7)) bg-secondary no-hover @endif

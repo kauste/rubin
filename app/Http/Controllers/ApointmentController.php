@@ -50,7 +50,7 @@ class ApointmentController extends Controller
             $appointment->appointment_start = $oneAppointment['appoitmentDate']['start'];
             $appointment->appointment_end = $oneAppointment['appoitmentDate']['end'];
             $appointment->save();
-            dump('done');
+            dump($oneAppointment['appoitmentDate']['end']);
         }
  
         session()->put('cart', []);
@@ -108,7 +108,9 @@ class ApointmentController extends Controller
         $appointmentInfo = $request->appointment;
         $masterId = (int) $request->masterId;
         $procedureId = (int) $appointmentInfo['procedureId'];
-        $appointmentDate = Carbon::create((int) $appointmentInfo['year'], (int) $appointmentInfo['month'], (int) $appointmentInfo['day'], (int) $appointmentInfo['hour'], (int)$appointmentInfo['minute'], 0, 'Europe/Vilnius')->format('Y-m-d H:i');
+        
+        $appointmentDate = Carbon::create($appointmentInfo['dateTime'], 0, 'Europe/Vilnius')->format('Y-m-d H:i');
+        dump($appointmentDate);
         $cart[] = [
             'masterId'=>$masterId,
             'procedureId'=>$procedureId,
