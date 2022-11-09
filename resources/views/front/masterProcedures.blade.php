@@ -7,7 +7,8 @@
                 <div class="master-image bg-danger col-5">
                     <img src="{{$master->file_path}}" class="card-img-top" alt="{{$master->name}}"></img>
                 </div>
-                <div class="card-body align-center d-block">
+                <h2 class="d-none name--for--edit--order align-center"><b>{{$master->name}} {{$master->surname}}</b></h2>
+                <div class="card-body card--body align-center d-block">
                     <div class="d-flex mt-5 mb-2">
                         <div>
                             <h5 class="card-title text-danger"><b>{{$master->name}} {{$master->surname}}</b></h5>
@@ -24,17 +25,10 @@
                         <div class="flex">
                             <label class="rating--sum" for="comment">Rating: <b>{{$rating}}</b></label>
                             <div class=" rating-form rating--form">
-                            {{-- <form class="rating-form rating--form" method="post" action="{{route('front-rate', $master)}}"> --}}
                                 @for($i = 1; $i < 6; $i++) <div class="rating-item">
                                     <svg class="rating-star rating--star {{$i}}" data-rating="{{$i}}"><use xlink:href="#star"></use></svg>
-                                    {{-- <img class="rating-star star-{{$i}}"src="{{asset('/svg/star.svg')}}"/> --}}
-                                    {{-- <input class="rating-input" type="radio" id="rating-{{$i}}" name="rating" value="{{$i}}" />
-                                    <label for="rating-{{$i}}">{{$i}}</label> --}}
                         </div>
                         @endfor
-                        {{-- @csrf
-                        <button class="btn btn-danger">Rate</button> --}}
-                        {{-- </form> --}}
                         </div>
                     </div>
                 </div>
@@ -91,7 +85,7 @@
             <h4 class="card-header text-body">
                 Choose time for <b></b>
             </h4>
-            <div class="card-body text-body">
+            <div class="card-body text-body callendar--include">
                 @include('parts.callendar')
             </div>
         <div class="callendar--btn--box justify-content-center center d-none">

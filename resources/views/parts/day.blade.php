@@ -36,7 +36,7 @@
             Availible appointments for this procedure
         </h5>
         <div class="card-body text-body">
-            <table class="table table-borderless">
+            <table class="table table-borderless availible--appointments">
                 <thead>
                     <tr>
                         <th></th>
@@ -48,7 +48,7 @@
                     @foreach ($appointmentTimes as $appointmentTime)
                     <tr valign="middle">
                         <thead>
-                          <td><input class="free--time" type="radio" id="{{$key}}" name="free-time" value="{{$key}}"/></td>
+                            <td><input class="free--time" type="radio" id="{{$key}}" name="free-time" value="{{$key}}" /></td>
                             <td class="appointment--starts">{{$appointmentTime[0]}}</td>
                             <td class="appointment--ends">{{$appointmentTime[1]}}</td>
                         </thead>
@@ -56,10 +56,9 @@
                     @endforeach
                 </div>
             </table>
-             <div class="d-flex justify-content-center center">
-                 <button type="button" class="btn btn-danger col-8 add--to--cart">Add to cart</button>
+            <div class="d-flex justify-content-center center">
+                <button type="button" class="btn btn-danger col-8 add--to--cart">Add to cart</button>
             </div>
         </div>
     </div>
 </div>
-

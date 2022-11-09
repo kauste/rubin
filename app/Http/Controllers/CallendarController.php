@@ -120,6 +120,7 @@ class CallendarController extends Controller
         $appointmentTimes = [];
         foreach($freeTimes as $freeTime){
             $endTimeCarbon = Carbon::createFromTimeString($freeTime[1]);
+
             $timeCarbon = Carbon::createFromTimeString($freeTime[0]);
             
             while($endTimeCarbon >= $timeCarbon->addMinutes($procedureDuration)){

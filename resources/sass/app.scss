@@ -42,11 +42,22 @@ input{
     display:flex;
     flex-direction: row !important;
     column-gap: 50px;
+    align-items: center;
 }
 .flex-2{
     display:flex;
     flex-direction: row !important;
     column-gap: 10px;
+}
+.conf-ord-grid {
+    display:grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr 5fr;
+    align-items: center;
+}
+.front-conf-ord-grid{
+    display:grid;
+    grid-template-columns: 2fr 2fr 2fr 1fr 1fr 1fr;
+    align-items: center;
 }
 .master-image{
     padding: 30px;
@@ -137,5 +148,4 @@ input{
 
 .rating-star:hover {
     cursor: pointer;
-    // fill:yellow;
 }

@@ -50,7 +50,6 @@ class ApointmentController extends Controller
             $appointment->appointment_start = $oneAppointment['appoitmentDate']['start'];
             $appointment->appointment_end = $oneAppointment['appoitmentDate']['end'];
             $appointment->save();
-            dump($oneAppointment['appoitmentDate']['end']);
         }
  
         session()->put('cart', []);
@@ -110,7 +109,6 @@ class ApointmentController extends Controller
         $procedureId = (int) $appointmentInfo['procedureId'];
         
         $appointmentDate = Carbon::create($appointmentInfo['dateTime'], 0, 'Europe/Vilnius')->format('Y-m-d H:i');
-        dump($appointmentDate);
         $cart[] = [
             'masterId'=>$masterId,
             'procedureId'=>$procedureId,
@@ -175,5 +173,140 @@ class ApointmentController extends Controller
         session()->put('cart', $cart);
         return redirect()->back()->with('message', 'Appointment deleted.');
         
+    }
+
+    public function confirmedOrders () {
+        $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                    ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                    ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id')
+            	                    ->where('user_id', Auth::user()->id)
+                                    ->get();
+        return view('front.confirmedOrders', ['appointments'=> $appointments, 'states'=> Apointment::STATES]);
+    }
+
+    public function backConfirmedOrders (Request $request) {
+        $states = Apointment::STATES;
+        $masters = Master::all();
+        if($request->sort){
+            $sort = $request->sort; // kodel i masyva buvo kista??
+            if($request->sort === 'date-asc'){
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                        ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                        ->join('users', 'apointments.user_id', 'users.id')
+                                        ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                        ->orderBy('appointment_start', 'asc')
+                                        ->get();
+            }
+            elseif ($request->sort === 'date-desc'){
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                        ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                        ->join('users', 'apointments.user_id', 'users.id')
+                                        ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                        ->orderBy('appointment_start', 'desc')
+                                        ->get();
+            }
+            elseif($request->sort === 'appointment-id-asc'){
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                        ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                        ->join('users', 'apointments.user_id', 'users.id')
+                                        ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                        ->orderBy('apointments.id', 'asc')
+                                        ->get();
+            }
+            elseif($request->sort === 'appointment-id-desc'){
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                        ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                        ->join('users', 'apointments.user_id', 'users.id')
+                                        ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                        ->orderBy('apointments.id', 'desc')
+                                        ->get();
+                                        //ar geriau ne duomenu bazes, o kolekciju metodais???
+            } else {
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                    ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                    ->join('users', 'apointments.user_id', 'users.id')
+                                    ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                    ->get();
+            }
+        } elseif($request->filter){
+            $filter = (int) $request->filter;
+            if($request->filter == 0){
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                ->join('users', 'apointments.user_id', 'users.id')
+                ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                ->get();
+            } else {
+                $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                    ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                    ->join('users', 'apointments.user_id', 'users.id')
+                                    ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                    ->where('masters.id', '=', $request->filter)
+                                    ->get();
+            }
+        } elseif($request->s){
+            $search = $request->s;
+            $words = explode(' ', trim($search));
+            $words = array_slice($words, 0, 4);
+            dump($words);
+            $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                        ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                        ->join('users', 'apointments.user_id', 'users.id')
+                                        ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                        ->where(function ($useWords) use ($words){
+                                            foreach($words as $word){
+                                                $useWords->where('masters.name', 'like', $word. '%')
+                                                ->orWhere('masters.surname', 'like', $word. '%')
+                                                ->orWhere('procedures.ruby_service', 'like', $word. '%')
+                                                ->orWhere('users.name', 'like', $word. '%');
+                                             }
+                                        })
+                                        ->get();
+        }
+        
+        else{
+            $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
+                                        ->join('procedures', 'apointments.procedure_id', 'procedures.id')
+                                        ->join('users', 'apointments.user_id', 'users.id')
+                                        ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id', 'users.id as user_id', 'users.name as user_name', 'users.email as user_email')
+                                        ->get();
+
+        }
+        return view('back.orders.confirmedOrders', [
+                                                    'appointments'=> $appointments,
+                                                    'sort' => $sort ?? 'default',
+                                                    'masters' => $masters,
+                                                    'filter' => $filter ?? '0',
+                                                    's' => $search ?? '',
+                                                    'states' => $states
+                                                    ]);
+    }
+
+    public function backChangeState(Request $request){
+        Apointment::where('id', '=', $request->id)
+                    ->update(['state'=> $request->state]);
+        return redirect()->back()->with('message', 'State is updated!');
+    }
+    public function backClientCanceledSeen(Request $request){
+        Apointment::where('id', '=', $request->id)
+                    ->delete();
+        return redirect()->back()->with('message', 'Appointment is deleted!');
+    }
+
+    public function frontChangeState(Request $request){
+        Apointment::where('id', '=', $request->id)
+                    ->update(['state'=> $request->state]);
+        if($request->state == 6){
+            return redirect()->back()->with('message', 'Appointment is canceled! It will be deleted once the administration see the it.');
+        }
+        else{
+            return redirect()->back()->with('message', 'Appointment is renewed.');
+
+        }
+    }
+    public function frontChangedStateSeen(Request $request){
+        Apointment::where('id', '=', $request->id)
+                    ->delete();
+        return redirect()->back()->with('message', 'Thank you for confirmation!');
     }
 }

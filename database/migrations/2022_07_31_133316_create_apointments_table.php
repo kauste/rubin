@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('apointments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedTinyInteger('state')->default(1);
             $table->unsignedBigInteger('procedure_id');
             $table->foreign('procedure_id')->references('id')->on('procedures');
             $table->unsignedBigInteger('master_id');

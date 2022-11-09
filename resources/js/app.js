@@ -17,46 +17,64 @@ const cartUpdate = () => {
     }
     
  })
+ const removeRadio = name => {
+     document.querySelectorAll('[name='+ name +']')
+     .forEach(r => {
+         r.checked = false;
+     })
+ }
+ const addMsg = text => {
+    const msg = document.querySelector('.message--javascript');
+    msg.classList.add('message');
+    msg.innerText = text;
+ }
+ const removeMsg = () => {
+    const msg = document.querySelector('.message--javascript');
+    msg.classList.remove('message');
+    msg.innerText = '';
+ }
  if(document.querySelector('.procedure--chosen')){
-     
      const procedureChosen = document.querySelector('.procedure--chosen');
      const backToProceduresBtn = document.querySelector('.back--to--procedures');
-     procedureChosen.addEventListener('click', () => {
-        const msg = document.querySelector('.message--javascript');
-        const procedureId = document.querySelector('input[name="procedure"]:checked')?.value;
-        const label = document.querySelector('label[for="' + procedureId + '"]');
-        const serviceBox = document.querySelector('.service--box');
-        const callendarBox = document.querySelector('.callendar--box');
-        const callendarHeader = callendarBox.querySelector('h4>b');
-        const callendarBtnBox= document.querySelector('.callendar--btn--box');
-        if(procedureId == null){
-            msg.classList.add('message');
-            msg.innerText = 'You did not choose procedure. Please choose from the list.';
-        } else{
-            msg.innerText = '';
-            msg.classList.remove('message');
+     const serviceBox = document.querySelector('.service--box');
+     const callendarBox = document.querySelector('.callendar--box');
+     const callendarHeader = callendarBox.querySelector('h4>b');
+     const callendarBtnBox= document.querySelector('.callendar--btn--box');
+     const masterActions = document.querySelector('.card--body');
+     const masterName = document.querySelector('.name--for--edit--order');
+    if(window.location.hash) {
+        const procedureId = window.location.hash.replace('#','');
+        const label = document.querySelector('label[for=' + procedureId + ']');
+            masterName.classList.remove('d-none');
+            masterActions.classList.add('d-none');
             serviceBox.classList.add('d-none');
             callendarBox.classList.remove('d-none');
-            callendarBtnBox.classList.remove('d-none');
-            callendarBtnBox.classList.add('rating-form');
             callendarHeader.innerText = label.innerText;
-        }
-    });
+      } else {
+        procedureChosen.addEventListener('click', () => {
+            const procedureId = document.querySelector('input[name=procedure]:checked')?.value;
+            const label = document.querySelector('label[for="' + procedureId + '"]');
+            if(!procedureId){
+                addMsg('You did not choose procedure. Please choose from the list.');
+            } else{
+                removeMsg();
+                serviceBox.classList.add('d-none');
+                callendarBox.classList.remove('d-none');
+                callendarBtnBox.classList.remove('d-none');
+                callendarBtnBox.classList.add('rating-form');
+                callendarHeader.innerText = label.innerText;
+            }
+        });
 
-    backToProceduresBtn.addEventListener('click', () => {
-        const serviceBox = document.querySelector('.service--box');
-        const callendarBox = document.querySelector('.callendar--box');
-        const callendarHeader = callendarBox.querySelector('h4>b');
-        const callendarBtnBox= document.querySelector('.callendar--btn--box');
-
-        serviceBox.classList.remove('d-none');
-        callendarBox.classList.add('d-none');
-        callendarBtnBox.classList.add('d-none');
-        callendarBtnBox.classList.remove('rating-form');
-        callendarHeader.innerText = '';
-    })
-
- }
+        backToProceduresBtn.addEventListener('click', () => {
+            serviceBox.classList.remove('d-none');
+            callendarBox.classList.add('d-none');
+            callendarBtnBox.classList.add('d-none');
+            callendarBtnBox.classList.remove('rating-form');
+            callendarHeader.innerText = '';
+        })
+    }
+}
  if(document.querySelector('.order--appointments')){
     document.querySelector('.order--appointments')
     .addEventListener('click', () => {
@@ -76,17 +94,14 @@ const cartUpdate = () => {
             })
             axios.post(makeOrderUrl, {appointments})
             .then(res => {
-                const msg = document.querySelector('.message--javascript');
-                msg.classList.add('message');
                 document.location.reload();
-                msg.innerText = res.data.message;
+                addMsg(res.data.message);
         })
 
     });
  }
 
- if(document.querySelector('.next--month')){
-  
+if(document.querySelector('.next--month')){
     const onNext = () => {
         const nextBtn = document.querySelector('.next--month')
         nextBtn.addEventListener('click', ()=>{
@@ -119,23 +134,31 @@ const cartUpdate = () => {
     const setDayEvents =() => {
         document.querySelectorAll('.week--day')
          .forEach(b => {
-            b.addEventListener('click', () => {
-                const date = b.dataset.timeData;
-                const masterId = document.querySelector('[name="master_id"]').value;
-                const procedureId = document.querySelector('input[name="procedure"]:checked').value;
-                axios.post(dayUrl, {date, masterId, procedureId})
-                .then(res => {           
-                    document.querySelector('.day--appointments').innerHTML = res.data.html;
-                    addToCart();
+            if(!b.classList.contains('no-hover')){
+                b.addEventListener('click', () => {
+                    const date = b.dataset.timeData;
+                    const masterId = document.querySelector('[name="master_id"]').value;
+                    let procedureId;
+                    if(!window.location.hash){
+                        procedureId = document.querySelector('input[name="procedure"]:checked')?.value;
+                    }
+                    else {
+                        procedureId = window.location.hash.replace('#','');
+                    }
+                    axios.post(dayUrl, {date, masterId, procedureId})
+                    .then(res => {           
+                        document.querySelector('.day--appointments').innerHTML = res.data.html;
+                        addToCart();
+                    })
                 })
-            })
+            }
          })
         }
     const addToCart = () => {
         const addToCartBtn = document.querySelector('.add--to--cart');
         const masterId = document.querySelector('[name=master_id]').value;
         addToCartBtn.addEventListener('click', () => {
-            const appintmentRadioBtn = document.querySelector('input[name="free-time"]:checked');
+            const appintmentRadioBtn = document.querySelector('input[name=free-time]:checked');
             const appointmenTime = appintmentRadioBtn.closest('thead');
             const appointment = {
                 'procedureId': document.querySelector('input[name="procedure"]:checked').value,
@@ -143,10 +166,10 @@ const cartUpdate = () => {
             }
             axios.post(addToCartUrl, {masterId, appointment})
            .then(res => {
-            const msg = document.querySelector('.message--javascript');
-            msg.classList.add('message');
-            msg.innerText = res.data.message;
+            removeRadio('free-time');
+            addMsg(res.data.message);
             cartUpdate();
+            addToCart();
            })
         })
     }
@@ -180,10 +203,8 @@ const cartUpdate = () => {
             axios.post(rateUrl, {rating, masterId})
             .then(res => {
                 const ratingNum = document.querySelector('.rating--sum>b');
-                const msg = document.querySelector('.message--javascript');
                 ratingNum.innerText = res.data.newRating;
-                msg.classList.add('message');
-                msg.innerText = res.data.message;
+                addMsg(res.data.message);
             })
         })
     })

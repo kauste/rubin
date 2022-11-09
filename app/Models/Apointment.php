@@ -9,6 +9,15 @@ class Apointment extends Model
 {
     use HasFactory;
 
+    const STATES = [
+        1 => 'New',
+        2 => 'Accepted',
+        3 => 'Canceled',
+        4 => 'Finished',
+        5 => 'Did not come',
+        6 => 'Client canceled'
+    ];
+
     public function procedure(){
         return $this->belongsTo(Procedure::class, 'procedure_id', 'id');  
     }

@@ -91,6 +91,11 @@
                                 <a class="dropdown-item" href="{{ route('masters-create')}}">Register a new master</a>
                             </div>
                         </li>
+                        <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('back-confirmed-orders')}}">
+                                    Appointments
+                                </a>
+                            </li>
                         @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) <li class="nav-item dropdown ">
                             <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
                                 Salons
@@ -104,6 +109,11 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link" href="{{route('front-masters')}}">
                                     Masters
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('front-confirmed-orders')}}">
+                                    My orders
                                 </a>
                             </li>
                             @endif

@@ -61,10 +61,17 @@ Route::prefix('masters')->name('masters-')->middleware('role:admin')->group(func
     Route::put('/update/{master}', [MasterController::class, 'update'])->name('update');
     Route::delete('/delete/{master}}', [MasterController::class, 'destroy'])->name('delete');
 });
+//orderiai
+Route::prefix('back')->name('back-')->middleware('role:admin')->group(function () {
+    Route::get('confirmed-orders', [ApointmentController::class, 'backConfirmedOrders'])->name('confirmed-orders');
+    Route::post('change-state/{id}', [ApointmentController::class, 'backChangeState'])->name('change-state');
+    Route::delete('cliend-canceled-seen/{id}', [ApointmentController::class, 'backClientCanceledSeen'])->name('cliend-canceled-seen');
+});
+
 
 //front
-
 Route::prefix('front')->name('front-')->middleware('role:user')->group(function () {
+    Route::get('confirmed-orders', [ApointmentController::class, 'confirmedOrders'])->name('confirmed-orders');
     Route::get('salons', [FrontController::class, 'salons'])->name('salons');
     Route::get('services', [FrontController::class, 'procedures'])->name('procedures');
     Route::get('masters', [FrontController::class, 'masters'])->name('masters');
@@ -73,7 +80,8 @@ Route::prefix('front')->name('front-')->middleware('role:user')->group(function 
     Route::get('comments/list/{id}', [CommentController::class, 'index'])->name('comments-list');
     Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
     Route::post('rate', [RatingController::class, 'rate'])->name('rate');
-    
+    Route::post('change-state/{id}', [ApointmentController::class, 'frontChangeState'])->name('change-state');
+    Route::delete('changed-state-seen/{id}', [ApointmentController::class, 'frontChangedStateSeen'])->name('changed-state-seen');
 });
 Route::get('my-order', [ApointmentController::class, 'showMyOrder'])->name('my-order');
 Route::delete('client-delete-appointment/{id}', [ApointmentController::class, 'clientDeleteAppointment'])->name('client-delete-appointment');
