@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-8 mt-5">
+<div class="container col-10 col-md-8 mt-5">
     <div class="row">
         <div class="card border-danger mb-3 m-3 p-3">
             <h4 class="card-header text-body">

@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex flex-column flex-lg-row align-center justify-content-center">
     <div class="callendar-blade">
         <div class="card-header text-body ">
             <div class="">

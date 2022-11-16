@@ -133,8 +133,10 @@
                                     </form>
                                 </div>
                             </li>
+                            @if(Auth::user()->role > 0 && Auth::user()->role < 10)
                             <li class="nav-item dropdown nav--cart">
                             </li>
+                            @endif
                             <li>
                             
                             </li>

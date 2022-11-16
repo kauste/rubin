@@ -149,3 +149,17 @@ input{
 .rating-star:hover {
     cursor: pointer;
 }
+
+.input-danger-focus:focus{
+    border: 	rgb(223, 71, 89) solid 1px;
+    box-shadow: 0 0 0 0.25rem	rgb(223, 71, 89, 0.25);
+}
+.form-check-input:checked{
+    background-color: rgb(223, 71, 89);
+}
+  
+@media(max-width:800px){
+    td {
+        font-size:0.8em;
+    }
+}
