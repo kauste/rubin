@@ -9,6 +9,7 @@ use App\Models\Master;
 use App\Models\Procedure;
 use App\Models\Apointment;
 use Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ApointmentController extends Controller
 {
@@ -40,18 +41,59 @@ class ApointmentController extends Controller
      */
     public function store(Request $request)
     {
-        
+
+            $validator = Validator::make($request->all(), [
+                'appointments.*.masterId' => ['required', 'integer', 'exists:masters,id'],
+                'appointments.*.procedureId' => ['required', 'integer', 'exists:procedures,id'],
+                'appointments.*.appoitmentDate.start' => ['required', 'date'],
+                'appointments.*.appoitmentDate.end' => ['required']
+            ]);
+
+            $validator->after(function ($validator) use ($request){
+                foreach($request->appointments as $oneAppointment){
+                    $master = Master::where('id', $oneAppointment['masterId'])
+                                    ->select('name', 'surname')
+                                    ->first();
+
+                    $thisDay = Carbon::parse($oneAppointment['appoitmentDate']['start'])->format('Y-m-d');
+                    $thisStarts = $oneAppointment['appoitmentDate']['start'];
+                    $thisEnds = $thisDay .' '. $oneAppointment['appoitmentDate']['end'];
+                    $thisPeriod = \Carbon\CarbonPeriod::create($thisStarts, '30 minutes', $thisEnds);
+
+                    $masterBusyTimes = Apointment::where('master_id', $oneAppointment['masterId'])
+                                ->whereDate('appointment_start', $thisDay)
+                                ->select('appointment_start', 'appointment_end')
+                                ->get();
+                    foreach($masterBusyTimes as $busyTime){
+                        $busyStart = $busyTime['appointment_start'];
+                        $busyEnds = $busyTime['appointment_end'];
+                        $busyPeriod = \Carbon\CarbonPeriod::create($busyStart, '30 minute', $busyEnds);
+                        // dump($thisPeriod->overlaps($busyPeriod));
+                        if ($thisPeriod->overlaps($busyPeriod)) {
+
+                            $validator->errors()->add('msg','Sorry! '. $master->name . ' ' . $master->surname .' is busy between '. $thisStarts .' and ' . $thisEnds . '. Time may be taken just recently.');
+                        }
+                    }
+               }
+            });
+            if($validator->fails()){
+                $msgs = $validator->errors()->getMessages()['msg'];
+                return response()->json(['msgs'=> $msgs]);
+            }
+
+
+
         foreach($request->appointments as $oneAppointment){
-            
+            $thisDay = Carbon::parse($oneAppointment['appoitmentDate']['start'])->format('Y-m-d');
             $appointment = New Apointment;
             $appointment->procedure_id = $oneAppointment['procedureId'];
             $appointment->master_id = $oneAppointment['masterId'];
             $appointment->user_id = Auth::user()->id;
             $appointment->appointment_start = $oneAppointment['appoitmentDate']['start'];
-            $appointment->appointment_end = $oneAppointment['appoitmentDate']['end'];
+            $appointment->appointment_end = $thisDay .' '. $oneAppointment['appoitmentDate']['end'];
             $appointment->save();
         }
- 
+       
         session()->put('cart', []);
         return response()->json([
             'message'=> 'Appintment(s) is (are) reserverd.'
@@ -161,7 +203,7 @@ class ApointmentController extends Controller
         $cart = collect([...$cart])-> map(function($appointment) use ($procedures, $masters) {
             $appointment['masterId']= [$appointment['masterId'], $masters[$appointment['masterId']]];
             $appointment['procedureId'] = [$appointment['procedureId'], ...$procedures[$appointment['procedureId']]];
-            $appointment['appointmentDate'] = [$appointment['appointmentDate'], Carbon::create($appointment['appointmentDate'])->addMinutes($appointment['procedureId'][3])]; 
+            $appointment['appointmentDate'] = [$appointment['appointmentDate'], Carbon::create($appointment['appointmentDate'])->addMinutes($appointment['procedureId'][3])->format('H:i')]; 
             return $appointment;
         });
         return view('front.order', ['cart'=> $cart]);
@@ -181,6 +223,13 @@ class ApointmentController extends Controller
                                     ->select('apointments.state', 'apointments.id as id', 'apointments.appointment_start', 'apointments.appointment_end', 'masters.name as master_name', 'masters.surname as master_surname', 'procedures.ruby_service as procedure', 'procedures.price as procedure_price', 'masters.id as master_id')
             	                    ->where('user_id', Auth::user()->id)
                                     ->get();
+    
+        $appointments->map(function($appointment) {
+            $appointment->appointment_day = Carbon::create($appointment->appointment_start)->format('Y-d-m');
+            $appointment->appointment_start = Carbon::create($appointment->appointment_start)->format('H:i');
+            $appointment->appointment_end = Carbon::create($appointment->appointment_end)->format('H:i');
+            return $appointment;
+        });
         return view('front.confirmedOrders', ['appointments'=> $appointments, 'states'=> Apointment::STATES]);
     }
 
@@ -248,7 +297,7 @@ class ApointmentController extends Controller
             $search = $request->s;
             $words = explode(' ', trim($search));
             $words = array_slice($words, 0, 4);
-            dump($words);
+            // dump($words);
             $appointments = Apointment::join('masters', 'apointments.master_id', 'masters.id')
                                         ->join('procedures', 'apointments.procedure_id', 'procedures.id')
                                         ->join('users', 'apointments.user_id', 'users.id')

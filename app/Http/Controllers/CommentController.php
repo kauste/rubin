@@ -62,7 +62,8 @@ class CommentController extends Controller
     {
         $validator = Validator::make($request->all(),
         [
-            'comment'=> ['required', 'min:5', 'max:100']
+            'comment'=> ['required', 'min:5', 'max:1000'],
+            'master_id' => ['required', 'integer', 'exists:masters,id']
         ],[
             'comment.required' => 'Comment is required!',
             'comment.min' => 'Comment should be at least 5 symbols length!',

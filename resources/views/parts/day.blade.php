@@ -1,4 +1,4 @@
-<div class="card-header callendar-blade align-center">
+<div class="card-header callendar-blade align-center callendar-day-menu">
     <div class="row">
         <b class="appointment--date">{{$date}}</b>
     </div>
@@ -57,7 +57,7 @@
                 </div>
             </table>
             <div class="d-flex justify-content-center center">
-                <button type="button" class="btn btn-danger col-8 add--to--cart">Add to cart</button>
+                <button type="button" class="btn btn-danger add--to--cart">Add to cart</button>
             </div>
         </div>
     </div>

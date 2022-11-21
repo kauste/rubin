@@ -10,6 +10,8 @@ use App\Models\Procedure;
 use App\Models\Rating;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+
 class FrontController extends Controller
 {
   public function salons(){
@@ -22,7 +24,14 @@ class FrontController extends Controller
   }
   public function masters(Request $request){
 
-    $salons = Salon::all();
+    $validator = Validator::make($request->all(), [
+      'filter_masters' => ['nullable', 'integer', 'exists:salons,id']
+    ]);
+    if($validator->fails()){
+      $request->flash();
+      return back()->withErrors($validator);
+    };
+    $salons = [Salon::all(), $request->filter_masters];
     if($request->filter_masters){
         $masters = DB::table('masters')
               ->join('salons', 'masters.salon_id', '=', 'salons.id')
@@ -39,19 +48,29 @@ class FrontController extends Controller
 
     return view('front.masters', ['masters'=> $masters, 'salons'=>$salons]);
   }
-  public function salonMasters(Request $request){
-        $salonMasters = DB::table('masters')
-            ->join('salons', 'masters.salon_id', '=', 'salons.id')
-            ->select('masters.*', 'salons.*', 'salons.name as salon_name', 'masters.id as master_id', 'masters.name as master_name')
-            ->where('masters.salon_id', $request->id)
-            ->get();
-          
-            $salon = Salon::where('salons.id', $request->id)->first();
 
-             return view('front.salonMasters', ['masters' => $salonMasters, 'salon'=> $salon]);
+  public function salonMasters(Request $request){
+
+    if(! (int) $request->id){
+      abort(404);
+    }
+
+    $salonMasters = DB::table('masters')
+      ->join('salons', 'masters.salon_id', '=', 'salons.id')
+      ->select('masters.*', 'salons.*', 'salons.name as salon_name', 'masters.id as master_id', 'masters.name as master_name')
+      ->where('masters.salon_id', $request->id)
+      ->get();
+          
+    $salon = Salon::where('salons.id', $request->id)->first();
+
+    return view('front.salonMasters', ['masters' => $salonMasters, 'salon'=> $salon]);
   }
+
   public function salonMasterProcedures (Request $request){
- 
+
+        if(! (int) $request->id){
+          abort(404);
+        }
         $procedures = Procedure::all();
         $master = Master::where('masters.id', $request->id)
         ->first();
@@ -59,8 +78,8 @@ class FrontController extends Controller
         $salon = Salon::where('salons.id', $master->salon_id)
         ->first();
         //gaunu dabartini laika
-        $today = Carbon::today()->setTimezone('Europe/Vilnius');
-        $monthNum = $today->month;
+        $today = Carbon::now()->setTimezone('Europe/Vilnius');
+        
         $monthName = $today->isoFormat('MMMM');
         $year = $today->isoFormat('YYYY');
         //paprasau formato
@@ -71,10 +90,14 @@ class FrontController extends Controller
         }
         //sudedu i areju dienas nuo pirmadienio iki sekmadienio
         $thisMonth = [];
+        $monthNum = Carbon::now()->setTimezone('Europe/Vilnius')->subMonth();
         do{
             $week = [];
             foreach(range(1, 7) as $_) {
-              $week[] = [$tempDate->day, Carbon::createFromDate($year, $today->month, $tempDate->day)->format('Y-m-d')];
+              if($tempDate->day == 1){
+                $monthNum->addMonth();
+              }
+              $week[] = [$tempDate->day, Carbon::createFromDate($year, $monthNum->month, $tempDate->day)->format('Y-m-d'), $monthNum->month];
                 $tempDate->addDay();
             }
             $thisMonth[] = $week;
@@ -83,14 +106,13 @@ class FrontController extends Controller
         $today = $today->toArray();
 
         $rating = round(Rating::where('master_id', $request->id)->avg('rate'), 2);
-        
+
         return view('front.masterProcedures', [
           'procedures'=> $procedures, 
           'master'=> $master, 
           'salon'=> $salon, 
           'thisMonth' =>  $thisMonth,
           'monthName' => $monthName,
-          'monthNum'=> $monthNum,
           'todayDay'=> $today,
           'year' => $year,
           'rating'=> $rating,

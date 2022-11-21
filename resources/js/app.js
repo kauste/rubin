@@ -28,6 +28,19 @@ const cartUpdate = () => {
     msg.classList.add('message');
     msg.innerText = text;
  }
+ const addMsgs = array => {
+    const msg = document.querySelector('.message--javascript');
+    msg.classList.add('message','alert');
+    let msgsHTML= '';
+    array.forEach((msg)=>{
+        msgsHTML += `<li class="list-group-item list-group-item-danger">${msg}</li>`;
+    })
+    msg.innerHTML = `
+                    <ul class="list-group">
+                    ${msgsHTML}
+                    </ul>
+                    `
+ }
  const removeMsg = () => {
     const msg = document.querySelector('.message--javascript');
     msg.classList.remove('message');
@@ -94,14 +107,21 @@ const cartUpdate = () => {
             })
             axios.post(makeOrderUrl, {appointments})
             .then(res => {
-                document.location.reload();
-                addMsg(res.data.message);
+                console.log(res.data);
+                if(res.data.message){
+                    document.querySelector('tbody').innerHTML = '';
+                    addMsg(res.data.message);
+                }
+                if(res.data.msgs){
+                    addMsgs(res.data.msgs);
+                }
         })
 
     });
  }
 
 if(document.querySelector('.next--month')){
+
     const onNext = () => {
         const nextBtn = document.querySelector('.next--month')
         nextBtn.addEventListener('click', ()=>{
@@ -131,47 +151,56 @@ if(document.querySelector('.next--month')){
             })
         });
     }
+    const thisDayEvents = (dateProp) => {
+        const date = dateProp;
+        const masterId = document.querySelector('[name="master_id"]').value;
+        let procedureId;
+        if(!window.location.hash){
+            procedureId = document.querySelector('input[name="procedure"]:checked')?.value;
+        }
+        else {
+            procedureId = window.location.hash.replace('#','');
+        }
+        axios.post(dayUrl, {date, masterId, procedureId})
+        .then(res => {           
+            document.querySelector('.day--appointments').innerHTML = res.data.html;
+            if(window.innerWidth < 992){
+                document.querySelector('.callendar-day-menu').scrollIntoView({behavior: "smooth"});
+            }
+            addToCart();
+        })
+    }
     const setDayEvents =() => {
         document.querySelectorAll('.week--day')
          .forEach(b => {
             if(!b.classList.contains('no-hover')){
                 b.addEventListener('click', () => {
-                    const date = b.dataset.timeData;
-                    const masterId = document.querySelector('[name="master_id"]').value;
-                    let procedureId;
-                    if(!window.location.hash){
-                        procedureId = document.querySelector('input[name="procedure"]:checked')?.value;
-                    }
-                    else {
-                        procedureId = window.location.hash.replace('#','');
-                    }
-                    axios.post(dayUrl, {date, masterId, procedureId})
-                    .then(res => {           
-                        document.querySelector('.day--appointments').innerHTML = res.data.html;
-                        addToCart();
-                    })
+                    thisDayEvents(b.dataset.timeData);
                 })
             }
-         })
-        }
+        })
+    }
     const addToCart = () => {
         const addToCartBtn = document.querySelector('.add--to--cart');
         const masterId = document.querySelector('[name=master_id]').value;
-        addToCartBtn.addEventListener('click', () => {
-            const appintmentRadioBtn = document.querySelector('input[name=free-time]:checked');
-            const appointmenTime = appintmentRadioBtn.closest('thead');
-            const appointment = {
-                'procedureId': document.querySelector('input[name="procedure"]:checked').value,
-                'dateTime': document.querySelector('.appointment--date').innerText + ' ' + appointmenTime.querySelector('.appointment--starts').innerText,
-            }
-            axios.post(addToCartUrl, {masterId, appointment})
-           .then(res => {
-            removeRadio('free-time');
-            addMsg(res.data.message);
-            cartUpdate();
-            addToCart();
-           })
-        })
+        if(!addToCartBtn.dataset.registered){
+            addToCartBtn.dataset.registered = true;
+            addToCartBtn.addEventListener('click', () => {
+                const appintmentRadioBtn = document.querySelector('input[name=free-time]:checked');
+                const appointmenTime = appintmentRadioBtn.closest('thead');
+                const appointment = {
+                    'procedureId': document.querySelector('input[name="procedure"]:checked').value,
+                    'dateTime': document.querySelector('.appointment--date').innerText + ' ' + appointmenTime.querySelector('.appointment--starts').innerText,
+                }
+                axios.post(addToCartUrl, {masterId, appointment})
+                .then(res => {
+                    const date = document.querySelector('.appointment--date').innerText;
+                    thisDayEvents(date);
+                    addMsg(res.data.message);
+                    cartUpdate();
+                })
+            })
+        }
     }
         
     window.addEventListener('load', () => {

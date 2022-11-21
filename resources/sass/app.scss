@@ -154,12 +154,50 @@ input{
     border: 	rgb(223, 71, 89) solid 1px;
     box-shadow: 0 0 0 0.25rem	rgb(223, 71, 89, 0.25);
 }
+textarea{
+    border: grey solid 1px;
+}
+textarea:focus-visible  {
+    outline: grey solid 2px;
+}
+
 .form-check-input:checked{
     background-color: rgb(223, 71, 89);
 }
-  
-@media(max-width:800px){
-    td {
+.chevron{
+    width:20px;
+    height:20px;
+    fill:#fff;
+}
+.chevron.left{
+    transform: rotate(180deg);
+    fill:rgb(223, 71, 89);
+    transition:linear 0.15s;
+}
+button.back:hover svg.chevron.left{
+    fill:#fff;
+}
+@media(max-width:768px){
+    thead.procedures td {
         font-size:0.8em;
+    }
+    .callendar-blade{
+        width:100%;
+    }
+    .cart-blade *, .order-blade *{
+        font-size: 0.8rem;
+    }
+}
+@media (max-width: 575.98px) { 
+    .callendar-row{
+        .callendar{
+            button{
+                height:40px;
+                width:40px;
+            }
+        }
+    }
+    td.one-day{
+        padding: 0.4rem 0.4rem;
     }
 }

@@ -1,5 +1,5 @@
 <div class="d-flex flex-column flex-lg-row align-center justify-content-center">
-    <div class="callendar-blade">
+    <div class="callendar-blade m-lg-5 m-xxl-0">
         <div class="card-header text-body ">
             <div class="">
                 <b>{{$year}}</b>
@@ -27,16 +27,17 @@
                     @foreach ($thisMonth as $key => $week)
                     <tr>
                         @foreach($week as $key => $day)
-                        <td>
+                        <td class="one-day">
                             <button data-time-data="{{$day[1]}}" class="date 
                                 @if($todayDay['year'] == $year 
-                                    && $todayDay['month'] == $monthNum
+                                    && $todayDay['month'] == $day[2]
                                     && $todayDay['day'] ==$day[0]) 
                                     bg-danger 
                                 @endif 
-                                 @if($todayDay['year'] > $year 
-                                    || $todayDay['month'] > $monthNum
-                                    || $todayDay['day'] > $day[0]) 
+                                @if(($todayDay['year'] > $year)
+                                    || ($todayDay['year'] == $year  && $todayDay['month'] > $day[2])
+                                    || ($todayDay['year'] == $year  && $todayDay['month'] == $day[2] && $todayDay['day'] > $day[0])
+                                    || ($todayDay['year'] == $year  && $todayDay['month'] == $day[2] && $todayDay['day'] == $day[0] && $todayDay['hour'] > 18))
                                     no-hover
                                 @endif 
                                 @if (!is_int($key / 7) && !is_int(($key + 1) / 7)) week--day  @endif

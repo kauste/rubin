@@ -12,8 +12,9 @@
              
                     <label for="filter-masters">Choose salon:</label>
                     <select  class="col-sm-4 col-md-4 col-lg-3"name="filter_masters" id="filter-masters">
-                        @foreach ($salons as $salon)
-                        <option value="{{$salon->id}}">{{$salon->name}}</option>
+                    <option value='' @if($salons[1] == null) selected @endif>All</option>
+                        @foreach ($salons[0] as $salon)
+                        <option value="{{$salon->id}}" @if($salons[1] == $salon->id) selected @endif>{{$salon->name}}</option>
                         @endforeach
                     </select>
                  

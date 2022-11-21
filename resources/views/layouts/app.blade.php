@@ -92,10 +92,10 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link" href="{{route('back-confirmed-orders')}}">
-                                    Appointments
-                                </a>
-                            </li>
+                            <a id="navbarDropdown" class="nav-link" href="{{route('back-confirmed-orders')}}">
+                                Appointments
+                            </a>
+                        </li>
                         @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) <li class="nav-item dropdown ">
                             <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
                                 Salons
@@ -133,14 +133,13 @@
                                     </form>
                                 </div>
                             </li>
-                            @if(Auth::user()->role > 0 && Auth::user()->role < 10)
-                            <li class="nav-item dropdown nav--cart">
-                            </li>
-                            @endif
-                            <li>
-                            
-                            </li>
-                            @endguest
+                            @if(Auth::user()->role > 0 && Auth::user()->role < 10) <li class="nav-item dropdown nav--cart">
+                                </li>
+                                @endif
+                                <li>
+
+                                </li>
+                                @endguest
                     </ul>
                 </div>
             </div>
@@ -156,8 +155,13 @@
     137.315,320.221 18.573,204.588 182.578,180.747 255.942,32.06 329.422,180.747 " />
             <path d="M97.732,499.448l30.299-176.21L0,198.56l176.84-25.706l79.097-160.301l79.219,160.301L512,198.56L383.969,323.237
     l30.298,176.203l-158.324-83.197L97.732,499.448z M255.941,396.726l135.365,71.134l-25.905-150.656l109.453-106.587l-151.167-21.975
-    L255.947,51.569l-67.634,137.073L37.144,210.617l109.453,106.587l-25.903,150.649L255.941,396.726z" fill="black"/>
+    L255.947,51.569l-67.634,137.073L37.144,210.617l109.453,106.587l-25.903,150.649L255.941,396.726z" fill="black" />
         </symbol>
+    <symbol id="chevron" viewBox="0 0 24 24">
+        <polygon points="7.293 4.707 14.586 12 7.293 19.293 8.707 20.707 17.414 12 8.707 3.293 7.293 4.707"/>
+    </symbol>
+
     </svg>
+
 </body>
 </html>
