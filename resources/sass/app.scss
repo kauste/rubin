@@ -177,6 +177,15 @@ textarea:focus-visible  {
 button.back:hover svg.chevron.left{
     fill:#fff;
 }
+.number-input-padding{
+    padding-left: 15px !important;
+    padding-right:10px !important;
+}
+@media(max-width:992px){
+    .conf-ord-grid{
+        padding:0px;
+    }
+}
 @media(max-width:768px){
     thead.procedures td {
         font-size:0.8em;
@@ -186,6 +195,14 @@ button.back:hover svg.chevron.left{
     }
     .cart-blade *, .order-blade *{
         font-size: 0.8rem;
+    }
+    .conf-ord-grid{
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr 1fr 2fr;
+        grid-template-columns: 1fr;
+        align-items: center;
+        padding-left:50px;
+        padding-right:50px;
     }
 }
 @media (max-width: 575.98px) { 
@@ -199,5 +216,8 @@ button.back:hover svg.chevron.left{
     }
     td.one-day{
         padding: 0.4rem 0.4rem;
+    }
+    .sort-filter-search{
+        font-size: 0.9rem;
     }
 }

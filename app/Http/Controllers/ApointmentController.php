@@ -70,7 +70,6 @@ class ApointmentController extends Controller
                         $busyPeriod = \Carbon\CarbonPeriod::create($busyStart, '30 minute', $busyEnds);
                         // dump($thisPeriod->overlaps($busyPeriod));
                         if ($thisPeriod->overlaps($busyPeriod)) {
-
                             $validator->errors()->add('msg','Sorry! '. $master->name . ' ' . $master->surname .' is busy between '. $thisStarts .' and ' . $thisEnds . '. Time may be taken just recently.');
                         }
                     }
@@ -145,11 +144,66 @@ class ApointmentController extends Controller
         //
     }
     public function addToCart(Request $request){
+
         $cart = session()->get('cart', []);
+
+        $validator = Validator::make($request->all(), [
+            'masterId' => ['required', 'integer', 'exists:masters,id'],
+            'appointment.procedureId'=>['required', 'integer', 'exists:procedures,id'],
+            'appointment.dateTime'=>['required', 'date'],
+        ]);
+        $validator->after(function ($validator) use ($request, $cart){
+
+            $master = Master::where('id',$request->masterId)
+                            ->select('name', 'surname')
+                            ->first();
+            $procedureDuration = Procedure::where('id', $request['appointment']['procedureId'])
+                            ->select('minutes')
+                            ->first()
+                            ->minutes;
+            $thisDay = Carbon::parse($request['appointment']['dateTime'])->format('Y-m-d');
+            $thisStarts = $request['appointment']['dateTime'];
+            $thisEnds = Carbon::parse($request['appointment']['dateTime'])->addMinutes($procedureDuration);
+            $thisPeriod = \Carbon\CarbonPeriod::create($thisStarts, '30 minutes', $thisEnds);
+
+            $masterBusyTimes = Apointment::where('master_id', $request->masterId)
+                                ->whereDate('appointment_start', $thisDay)
+                                ->select('appointment_start', 'appointment_end')
+                                ->get();
+                             dump($request->masterId, 'lklnklb', $request->masterId) ;
+            foreach($cart as $item){
+                if($item['masterId'] == $request->masterId
+                && str_contains($item['appointmentDate'], $thisDay)
+                && Carbon::now()->isBefore(Carbon::parse($item['appointmentDate']))){
+                    $cartProcedureDuration = Procedure::where('id', $item['procedureId'])
+                                                    ->select('minutes')
+                                                    ->first()
+                                                    ->minutes;
+                    $appointment = new Apointment;
+                    $appointment->appointment_start = $item['appointmentDate'];
+                    $appointment->appointment_end = Carbon::parse($item['appointmentDate'])->addMinutes($cartProcedureDuration)->format('Y-m-d H:i');
+                    $masterBusyTimes->push($appointment);
+                }
+            }
+            $masterBusyTimes = $masterBusyTimes->sortBy('appointment_start');
+
+            foreach($masterBusyTimes as $busyTime){
+                        $busyStart = $busyTime['appointment_start'];
+                        $busyEnds = $busyTime['appointment_end'];
+                        $busyPeriod = \Carbon\CarbonPeriod::create($busyStart, '30 minute', $busyEnds);
+                        if ($thisPeriod->overlaps($busyPeriod)) {
+                            $validator->errors()->add('msg','Sorry! '. $master->name . ' ' . $master->surname .' is busy between '. $thisStarts .' and ' . $thisEnds . '. Time may be taken just recently.');
+                        }
+                    }
+        });
+        if($validator->fails()){
+            $msgs = $validator->errors()->getMessages()['msg'];
+            return response()->json(['msgs'=> $msgs]);
+        }
+        
         $appointmentInfo = $request->appointment;
         $masterId = (int) $request->masterId;
         $procedureId = (int) $appointmentInfo['procedureId'];
-        
         $appointmentDate = Carbon::create($appointmentInfo['dateTime'], 0, 'Europe/Vilnius')->format('Y-m-d H:i');
         $cart[] = [
             'masterId'=>$masterId,
@@ -166,11 +220,8 @@ class ApointmentController extends Controller
         $masters = Master::all()->toArray();
         $mastersSurnames = array_column($masters, 'surname', 'id');
         $mastersNames = array_column($masters, 'name', 'id');
-    
-        
         $procedures = Procedure::all()->toArray();
         $procedures= array_column($procedures, 'ruby_service', 'id');
-        
         
         $cart = session()->get('cart', []);
 

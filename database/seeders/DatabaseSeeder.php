@@ -106,10 +106,15 @@ class DatabaseSeeder extends Seeder
             'salon_id' => 3,
         ]);
         DB::table('users')->insert([
-            'name' => 'Rugilike',
-            'email' => 'rugilike@gmail.com',
+            'name' => 'amin',
+            'email' => 'admin@example.com',
             'password' => Hash::make('123'),
             'role'=> 10,
+        ]);
+        DB::table('users')->insert([
+            'name' => 'onute',
+            'email' => 'onute@onute.com',
+            'password' => Hash::make('123'),
         ]);
         
 

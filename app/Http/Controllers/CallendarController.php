@@ -112,14 +112,12 @@ class CallendarController extends Controller
                     ->whereDate('appointment_start', $request->date)
                     ->select('appointment_start', 'appointment_end')
                     ->get();
-            dump($appointments);
                     foreach($cartForThisDayMaster as $oneCartAppointment){
                         $cartAppointment = new Apointment;
                         $cartAppointment->appointment_start =  $oneCartAppointment['appointment_start'];
                         $cartAppointment->appointment_end = $oneCartAppointment['appointment_end'];
                         $appointments->push($cartAppointment);
                     }
-                    dump($appointments);
         //filter appointments that are later than now
         $appointments = $appointments->filter(function ($value, $key) {
                                             return Carbon::create($value['appointment_start'])->greaterThanOrEqualTo(Carbon::now());
@@ -133,7 +131,7 @@ class CallendarController extends Controller
         if($dateNow === $request->date 
             && $timeNow->greaterThan(Carbon::create($dateNow . ' 10:00')))
         {
-            $freeTimeStarts = $timeNow->addMinutes(30)->ceilMinute(30)->format('H:i');
+            $freeTimeStarts = Carbon::now()->addMinutes(30)->ceilMinute(30)->format('H:i');
         } 
 
         $freeTimes = [];
