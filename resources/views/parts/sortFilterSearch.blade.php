@@ -1,7 +1,7 @@
   <h5 class="card-header">Sort filter search</h5>
   <div class="card-body">
       <div class="d-flex flex-column flex-lg-row justify-content-between">
-          <div>
+          <div class="col-lg-6"">
               <form method="get" action="{{route('back-confirmed-orders')}}" class="input-group mb-3">
                   <div class="input-group-append col-3 col-sm-2 col-lg-auto">
                       <label class="input-group-text" for="sort">Sort by:</label>
@@ -18,7 +18,7 @@
                   </div>
               </form>
           </div>
-          <div>
+          <div class="col-lg-6">
               <form method="get" action="{{route('back-confirmed-orders')}}" class="input-group mb-3">
                   <div class="input-group-append col-3 col-sm-2 col-lg-auto">
                       <label class="input-group-text" for="filter">Filter by:</label>
