@@ -16,9 +16,11 @@
         const previousMonthUrl = "{{route('previous-month')}}";
         const dayUrl = "{{route('show-day')}}";
         const addToCartUrl = "{{route('add-to-cart')}}";
+        const updateToCartUrl = "{{route('update-to-cart')}}";
         const showNavCartUrl = "{{route('show-nav-cart')}}";
         const makeOrderUrl = "{{route('make-order')}}";
         const rateUrl = "{{route('front-rate')}}";
+        
 
     </script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])

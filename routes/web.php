@@ -76,7 +76,7 @@ Route::prefix('front')->name('front-')->middleware('role:user')->group(function 
     Route::get('services', [FrontController::class, 'procedures'])->name('procedures');
     Route::get('masters', [FrontController::class, 'masters'])->name('masters');
     Route::get('salon/masters/{id}', [FrontController::class, 'salonMasters'])->name('salon-masters');
-    Route::get('{id}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
+    Route::get('{id}/{date?}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
     Route::get('comments/list/{id}', [CommentController::class, 'index'])->name('comments-list');
     Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
     Route::post('rate', [RatingController::class, 'rate'])->name('rate');
@@ -91,6 +91,7 @@ Route::post('next-month/', [CallendarController::class, 'nextMonth'])->name('nex
 Route::post('previous-month/', [CallendarController::class, 'previousMonth'])->name('previous-month');
 Route::post('day', [CallendarController::class, 'showDay'])->name('show-day');
 Route::post('add-to-cart', [ApointmentController::class, 'addToCart'])->name('add-to-cart');
+Route::put('update-to-cart', [ApointmentController::class, 'updateToCart'])->name('update-to-cart');
 Route::get('show-nav-cart', [ApointmentController::class, 'showNavCart'])->name('show-nav-cart');
 Route::post('make-order', [ApointmentController::class, 'store'])->name('make-order');
 

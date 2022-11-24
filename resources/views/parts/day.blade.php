@@ -47,11 +47,11 @@
                 <div class="row">
                     @foreach ($appointmentTimes as $appointmentTime)
                     <tr valign="middle">
-                        <thead>
+                        <tbody>
                             <td><input class="free--time" type="radio" id="{{$key}}" name="free-time" value="{{$key}}" /></td>
                             <td class="appointment--starts">{{$appointmentTime[0]}}</td>
                             <td class="appointment--ends">{{$appointmentTime[1]}}</td>
-                        </thead>
+                        </tbody>
                     </tr>
                     @endforeach
                 </div>

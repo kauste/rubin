@@ -1,7 +1,7 @@
  import * as bootstrap from 'bootstrap';
 import axios from 'axios';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
+const cartBladeUrl = 'http://localhost/bit/6-rubin/rubin/public/my-order';
 const cartUpdate = () => {
     axios.get(showNavCartUrl)
     .then(res =>{
@@ -54,16 +54,23 @@ const cartUpdate = () => {
      const callendarHeader = callendarBox.querySelector('h4>b');
      const callendarBtnBox= document.querySelector('.callendar--btn--box');
      const masterActions = document.querySelector('.card--body');
-     const masterName = document.querySelector('.name--for--edit--order');
+    const masterInfoDOM = document.querySelector('.master--info');
     if(window.location.hash) {
         const procedureId = window.location.hash.replace('#','');
-        const label = document.querySelector('label[for=' + procedureId + ']');
-            masterName.classList.remove('d-none');
-            masterActions.classList.add('d-none');
-            serviceBox.classList.add('d-none');
-            callendarBox.classList.remove('d-none');
-            callendarHeader.innerText = label.innerText;
-      } else {
+        const label = document.querySelector('label[for="' + procedureId + '"]');
+        const masterNameText = document.querySelector('.card-title,text-danger').innerText
+        masterActions.classList.add('d-none');
+        serviceBox.classList.add('d-none');
+        callendarBox.classList.remove('d-none');
+        callendarHeader.innerText = label.innerText;
+        let masterH2 = document.createElement('h2');
+        masterH2.append(masterNameText);
+        masterInfoDOM.append(masterH2);
+        masterInfoDOM.style.alignItems = 'center';
+        masterInfoDOM.style.gap = '50px';
+        masterInfoDOM.firstElementChild.firstElementChild.classList.remove('col-md-5')
+        masterInfoDOM.closest('.card').classList.remove('flex');
+    } else {
         procedureChosen.addEventListener('click', () => {
             const procedureId = document.querySelector('input[name=procedure]:checked')?.value;
             const label = document.querySelector('label[for="' + procedureId + '"]');
@@ -77,9 +84,9 @@ const cartUpdate = () => {
                 callendarBtnBox.classList.add('rating-form');
                 callendarHeader.innerText = label.innerText;
             }
-        });
+    });
 
-        backToProceduresBtn.addEventListener('click', () => {
+    backToProceduresBtn.addEventListener('click', () => {
             serviceBox.classList.remove('d-none');
             callendarBox.classList.add('d-none');
             callendarBtnBox.classList.add('d-none');
@@ -160,10 +167,14 @@ if(document.querySelector('.next--month')){
         }
         else {
             procedureId = window.location.hash.replace('#','');
+            
         }
         axios.post(dayUrl, {date, masterId, procedureId})
         .then(res => {           
             document.querySelector('.day--appointments').innerHTML = res.data.html;
+            if(window.location.hash){
+                document.querySelector('.add--to--cart').innerText = 'Edit';
+            }
             if(window.innerWidth < 992){
                 document.querySelector('.callendar-day-menu').scrollIntoView({behavior: "smooth"});
             }
@@ -187,18 +198,39 @@ if(document.querySelector('.next--month')){
             addToCartBtn.dataset.registered = true;
             addToCartBtn.addEventListener('click', () => {
                 const appintmentRadioBtn = document.querySelector('input[name=free-time]:checked');
-                const appointmenTime = appintmentRadioBtn.closest('thead');
-                const appointment = {
-                    'procedureId': document.querySelector('input[name="procedure"]:checked').value,
-                    'dateTime': document.querySelector('.appointment--date').innerText + ' ' + appointmenTime.querySelector('.appointment--starts').innerText,
+                const appointmenTime = appintmentRadioBtn.closest('tbody');
+                const dateTime = document.querySelector('.appointment--date').innerText + ' ' + appointmenTime.querySelector('.appointment--starts').innerText;
+                if(!window.location.hash){
+                    const appointment = {
+                        'procedureId': document.querySelector('input[name="procedure"]:checked')?.value,
+                        'dateTime': dateTime,
+                    }
+                    axios.post(addToCartUrl, {masterId, appointment})
+                    .then(res => {
+                        const date = document.querySelector('.appointment--date').innerText;
+                        thisDayEvents(date);
+                        addMsg(res.data.message);
+                        cartUpdate();
+                    })
                 }
-                axios.post(addToCartUrl, {masterId, appointment})
-                .then(res => {
-                    const date = document.querySelector('.appointment--date').innerText;
-                    thisDayEvents(date);
-                    addMsg(res.data.message);
-                    cartUpdate();
-                })
+                else {
+                    let path = location.pathname;
+                    const leRegex = /[\d]{4}[-][0-1][0-9][-][0-3][0-9][+][0-2][0-9][:][0-5][0-9]/;
+                    const match = path.match(leRegex);
+                    const previousDate = match[0];
+                    console.log()
+                    const appointment = {
+                        'procedureId': window.location.hash.replace('#',''),
+                        'dateTime': dateTime,
+                    }
+                    axios.put(updateToCartUrl, {masterId, previousDate, appointment})
+                    .then(res => {
+                        window.location.href = cartBladeUrl;
+                        addMsg(res.data.message);
+                         cartUpdate();
+                    });
+                }
+                
             })
         }
     }

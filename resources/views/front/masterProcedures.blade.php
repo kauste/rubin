@@ -4,11 +4,10 @@
     <div class="row">
         <div class="card border-danger mb-3 m-3 p-3">
             <div class="card col-12 flex mb-5">
-                <div class="d-flex flex-column flex-md-row">
+                <div class="d-flex flex-column flex-md-row  master--info">
                     <div class="master-image bg-danger col-md-5">
                         <img src="{{$master->file_path}}" class="card-img-top" alt="{{$master->name}}"></img>
                     </div>
-                    <h2 class="d-none name--for--edit--order align-center"><b>{{$master->name}} {{$master->surname}}</b></h2>
                     <div class="card-body card--body align-center d-block">
                         <div class="d-flex gap-4 justify-content-center align-center mt-5 mb-2">
                             <div>

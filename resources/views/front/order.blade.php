@@ -29,7 +29,7 @@
                             <td class="master--id" data-master-id="{{$appointment['masterId'][0]}}">{{$appointment['masterId'][1]}}</td>
                             <td class="procedure--id" data-procedure-id="{{$appointment['procedureId'][0]}}">{{$appointment['procedureId'][2]}}</td>
                             <td class="d-flex flex-column flex-sm-row align-center gap-1">
-                                <a href=" {{route('front-salon-master', $appointment['masterId'][0]).'#'.$appointment['procedureId'][0]}}" class="btn btn-secondary">Edit date</a>
+                                <a href=" {{route('front-salon-master', [$appointment['masterId'][0], str_replace(' ', '+', $appointment['appointmentDate'][0])]).'#'.$appointment['procedureId'][0]}}" class="btn btn-secondary">Edit date</a>
                                 <form action="{{route('client-delete-appointment', $id)}}" method="post">
                                     @csrf
                                     @method('delete')
