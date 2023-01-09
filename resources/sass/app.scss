@@ -221,3 +221,40 @@ button.back:hover svg.chevron.left{
         font-size: 0.9rem;
     }
 }
+.task-list{
+    list-style: none;
+    
+}
+.task-list li{
+position:relative;
+}
+
+.task-list li::before{
+    content: '';
+    position:absolute;
+    height:20px;
+    width:20px;
+    background-image: url('./../../public/svg/ruby-ico.svg');
+    background-repeat: no-repeat;
+    background-position: centers;
+    top:5px;
+    left: -25px;
+    transform:rotate(45deg);
+}
+.task-list > li > i{
+    display:block;
+    position: relative;
+    margin-left:20px;
+}
+.task-list > li > i::before{
+    content:'';
+    position:absolute;
+    height:25px;
+    width: 25px;
+    background-image: url('./../../public/svg/chevron.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    left: -20px;
+    top:2px;
+    transform: scale(0.5);
+}

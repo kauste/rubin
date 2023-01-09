@@ -1,5 +1,5 @@
- import * as bootstrap from 'bootstrap';
 import axios from 'axios';
+import 'bootstrap';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 const cartBladeUrl = 'http://localhost/bit/6-rubin/rubin/public/my-order';
 const cartUpdate = () => {
@@ -7,21 +7,6 @@ const cartUpdate = () => {
     .then(res =>{
         document.querySelector('.nav--cart').innerHTML = res.data.html;
     })
- }
- window.addEventListener('load', () => {
-    cartUpdate();
-    if(document.querySelector('.message--javascript.message')){
-        const msg = document.querySelector('.message--javascript');
-        msg.classList.remove('message');
-        msg.innerText ='';
-    }
-    
- })
- const removeRadio = name => {
-     document.querySelectorAll('[name='+ name +']')
-     .forEach(r => {
-         r.checked = false;
-     })
  }
  const addMsg = text => {
     const msg = document.querySelector('.message--javascript');
@@ -41,11 +26,31 @@ const cartUpdate = () => {
                     </ul>
                     `
  }
+
  const removeMsg = () => {
     const msg = document.querySelector('.message--javascript');
     msg.classList.remove('message');
     msg.innerText = '';
  }
+ window.addEventListener('load', () => {
+    cartUpdate();
+    if(document.querySelector('.message--javascript.message')){
+        const msg = document.querySelector('.message--javascript');
+        msg.classList.remove('message');
+        msg.innerText ='';
+    }
+    if(window.location.hash == '#msg'){
+        addMsg(msg);
+     }
+ })
+
+ const removeRadio = name => {
+     document.querySelectorAll('[name='+ name +']')
+     .forEach(r => {
+         r.checked = false;
+     })
+ }
+
  if(document.querySelector('.procedure--chosen')){
      const procedureChosen = document.querySelector('.procedure--chosen');
      const backToProceduresBtn = document.querySelector('.back--to--procedures');
@@ -225,9 +230,10 @@ if(document.querySelector('.next--month')){
                     }
                     axios.put(updateToCartUrl, {masterId, previousDate, appointment})
                     .then(res => {
-                        window.location.href = cartBladeUrl;
-                        addMsg(res.data.message);
-                         cartUpdate();
+                        const redirectUrl = cartBladeUrl + '#msg';
+                        window.location.href = redirectUrl;
+                        // addMsg(res.data.message);
+                        //  cartUpdate();
                     });
                 }
                 

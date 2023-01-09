@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+<script>
+ const msg = 'Appointment time is edited.'
+</script>
 <div class="container col-11 col-md-10 col-xl-8 mt-5 cart-blade">
     <div class="row">
         <div class="card border-danger mb-3 m-3 p-md-3 p-0">

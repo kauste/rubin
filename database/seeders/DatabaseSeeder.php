@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('masters')->insert([
             'name' => 'Kamile',
-            'surname' => 'Kiskyte',
+            'surname' => 'Pluke',
             'file_path' => $asset . '/kamile.jpg',
             'salon_id' => 1,
         ]);
@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('masters')->insert([
             'name' => 'Evelina',
-            'surname' => 'Ever',
+            'surname' => 'Saule',
             'file_path' => $asset . '/evelina.jpg',
             'salon_id' => 2,
         ]);
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
         ]);
         DB::table('masters')->insert([
             'name' => 'Raminta',
-            'surname' => 'Bebenčiūtė',
+            'surname' => 'Saulele',
             'file_path' => $asset . '/raminta.jpg',
             'salon_id' => 3,
         ]);
@@ -112,8 +112,8 @@ class DatabaseSeeder extends Seeder
             'role'=> 10,
         ]);
         DB::table('users')->insert([
-            'name' => 'onute',
-            'email' => 'onute@onute.com',
+            'name' => 'user',
+            'email' => 'user@example.com',
             'password' => Hash::make('123'),
         ]);
         

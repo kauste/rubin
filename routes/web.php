@@ -9,6 +9,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CallendarController;
 use App\Http\Controllers\ApointmentController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\TaskController;
 
 
 use App\Models\Comment;
@@ -27,6 +28,10 @@ use App\Models\Comment;
 Route::get('/welcome', function () {
     return view('welcome');
 });
+Route::get('/', [TaskController::class, 'index'])->name('task');
+//mail
+Route::post('/mail', [TaskController::class, 'mail'])->name('mail');
+
 
 //Login
 
@@ -68,7 +73,6 @@ Route::prefix('back')->name('back-')->middleware('role:admin')->group(function (
     Route::delete('cliend-canceled-seen/{id}', [ApointmentController::class, 'backClientCanceledSeen'])->name('cliend-canceled-seen');
 });
 
-
 //front
 Route::prefix('front')->name('front-')->middleware('role:user')->group(function () {
     Route::get('confirmed-orders', [ApointmentController::class, 'confirmedOrders'])->name('confirmed-orders');
@@ -95,6 +99,7 @@ Route::put('update-to-cart', [ApointmentController::class, 'updateToCart'])->nam
 Route::get('show-nav-cart', [ApointmentController::class, 'showNavCart'])->name('show-nav-cart');
 Route::post('make-order', [ApointmentController::class, 'store'])->name('make-order');
 
-Auth::routes();
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');
+Auth::routes(['register'=>false]);
+// Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');
+

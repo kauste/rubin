@@ -6,11 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- zvaigzduciu reikalai -->
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- favicon --}}
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('/favicon/apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('/favicon/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('/favicon/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{asset('/favicon/site.webmanifest')}}">
+    <link rel="mask-icon" href="{{asset('/favicon/safari-pinned-tab.svg" color="#EE7F7F')}}">
+    <meta name="msapplication-TileColor" content="#c9d1d0">
+    <meta name="theme-color" content="#ffffff">
 
 
 
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Ruby</title>
     <script>
         const nextMonthUrl = "{{route('next-month')}}";
         const previousMonthUrl = "{{route('previous-month')}}";
@@ -20,8 +27,6 @@
         const showNavCartUrl = "{{route('show-nav-cart')}}";
         const makeOrderUrl = "{{route('make-order')}}";
         const rateUrl = "{{route('front-rate')}}";
-        
-
     </script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <!-- Fonts -->
@@ -65,6 +70,9 @@
                         </li>
                         @endif
                         @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('task') }}">Task</a>
+                        </li>
                         @if(Auth::user()->role > 9)
                         <li class="nav-item dropdown ">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -98,10 +106,11 @@
                                 Appointments
                             </a>
                         </li>
-                        @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) <li class="nav-item dropdown ">
-                            <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
-                                Salons
-                            </a>
+                        @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) 
+                            <li class="nav-item dropdown ">
+                                <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
+                                    Salons
+                                </a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link" href="{{route('front-procedures')}}">
@@ -135,12 +144,13 @@
                                     </form>
                                 </div>
                             </li>
-                            @if(Auth::user()->role > 0 && Auth::user()->role < 10) <li class="nav-item dropdown nav--cart">
+                            @if(Auth::user()->role > 0 && Auth::user()->role < 10) 
+                                <li class="nav-item dropdown nav--cart">
                                 </li>
                                 @endif
-                                <li>
+                                {{-- <li>
 
-                                </li>
+                                </li> --}}
                                 @endguest
                     </ul>
                 </div>
