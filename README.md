@@ -7,9 +7,23 @@
 
 This is laravel project made for educational purposes only. The main purpose was to learn one-to-many relationship between tables while exercising CRUD.
 
-In this project I used Carbon for the first time as well as made slots for availible orders and enable mail. Also deepened validation rules knowledge.
+<!-- In this project I used Carbon for the first time as well as made slots for availible orders and enabled mail. Also deepened validation rules knowledge.
 
-Practiced javascript, where I find out and used many window, document and element properties for the first time as well as included regex.
+Practiced javascript, where I find out and used many window, document and element properties for the first time as well as included regex. -->
+## Used for the first time
+
+- One-to-many relationship
+- Carbon
+- Slots
+- Mail
+- Many window, document and element properties in javascript
+- Regex
+
+## Deepen my knowledge
+
+- CRUD
+- Validation rules
+- Svg
 
 ## Authors
 
