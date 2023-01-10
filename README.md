@@ -16,7 +16,7 @@ Practiced javascript, where I find out and used many window, document and elemen
 - Carbon
 - Slots
 - Mail
-- Many window, document and element properties in javascript
+- Window, document and element properties in javascript
 - Regex
 
 ## Deepen my knowledge
