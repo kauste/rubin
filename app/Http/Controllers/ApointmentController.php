@@ -68,7 +68,6 @@ class ApointmentController extends Controller
                         $busyStart = $busyTime['appointment_start'];
                         $busyEnds = $busyTime['appointment_end'];
                         $busyPeriod = \Carbon\CarbonPeriod::create($busyStart, '30 minute', $busyEnds);
-                        // dump($thisPeriod->overlaps($busyPeriod));
                         if ($thisPeriod->overlaps($busyPeriod)) {
                             $validator->errors()->add('msg','Sorry! '. $master->name . ' ' . $master->surname .' is busy between '. $thisStarts .' and ' . $thisEnds . '. Time may be taken just recently.');
                         }
