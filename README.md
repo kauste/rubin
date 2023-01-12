@@ -24,6 +24,7 @@ Practiced javascript, where I find out and used many window, document and elemen
 - CRUD
 - Validation rules
 - Svg
+- Responsive
 
 ## Authors
 
