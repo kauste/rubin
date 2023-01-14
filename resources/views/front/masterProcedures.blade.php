@@ -23,7 +23,7 @@
                         </div>
                         <div class="mb-3">
                             <div class="flex">
-                                <label class="rating--sum" for="comment">Rating: <b>{{$rating}}</b></label>
+                                <label class="rating--sum">Rating: <b>{{$rating}}</b></label>
                                 <div class=" rating-form rating--form">
                                     @for($i = 1; $i < 6; $i++) <div class="rating-item">
                                         <svg class="rating-star rating--star {{$i}}" data-rating="{{$i}}">

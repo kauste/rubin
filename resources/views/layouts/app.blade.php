@@ -27,11 +27,11 @@
         const showNavCartUrl = "{{route('show-nav-cart')}}";
         const makeOrderUrl = "{{route('make-order')}}";
         const rateUrl = "{{route('front-rate')}}";
-        const assetUrl = 'rugile.website/ruby/';
+        const assetUrl = 'http://rugile.website/ruby';
     </script>
-    {{-- <script src="{{asset('build/assets/app.a49877dc.js')}}" defer></script> --}}
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    {{-- <link rel="stylesheet" href="{{asset('build/assets/app.09b943b0.css')}}"> --}}
+    <script src="{{asset('build/assets/app.a49877dc.js?v=3')}}" defer></script>
+    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
+    <link rel="stylesheet" href="{{asset('build/assets/app.6e9e5c56.css?v=4')}}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

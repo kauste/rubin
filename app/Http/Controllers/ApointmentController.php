@@ -295,7 +295,6 @@ class ApointmentController extends Controller
             }
 
         }
-
         session()->put('cart', $cart);
             session()->put('message', '');
         return response()->json([

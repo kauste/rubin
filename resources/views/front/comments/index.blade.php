@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-10 col-xl-9 col-xxl-8 mt-5">
+<div class="container col-12 col-sm-10 col-xl-9 col-xxl-8 mt-5">
     <div class="row">
-        <div class="card border-danger mb-3 m-3 p-3">
+        <div class="card border-danger m-0 m-sm-3 mb-3 p-0 p-sm-3">
             <div class="card col-12 flex mb-5">
                 <div class="d-flex flex-column flex-md-row">
                     <div class="master-image bg-danger col-md-5">
@@ -29,7 +29,6 @@
                                 @csrf
                                 @method('post')
                                 <button type="submit" class="btn btn-danger">Submit</button>
-                                
                             </form>
                             <a href="{{route('front-salon-master', $master->id)}}" class="btn btn-outline-danger mt-3">Go back to this master appointments<a>
                         </div>
