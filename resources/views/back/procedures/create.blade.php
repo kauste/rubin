@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 mt-5">
+<div class="container col-12 col-sm-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 mt-5">
     <div class="row">
-        <div class="card border-danger mb-3 m-3 p-1 p-sm-2 p-md-3 p-lg-4">
+        <div class="card border-danger m-0 m-sm-3 p-0 p-sm-1 p-sm-2 p-md-3 p-lg-4">
             <h4 class="card-header text-body">Add new procedure</h4>
             <div class="card-body text-body">
                 <form class="p-3" method="post" action="{{route('procedures-store')}}">
@@ -13,7 +13,7 @@
                         </div>
                         <div class="form-group">
                             <div class="fw-bold">Procedure duration</div>
-                                <div class="d-flex gap-5 col-10 col-xl-9" >
+                                <div class="d-flex gap-5 col-12 col-sm-10 col-xl-9" >
                                 <div>
                                     <label for="hours"><small>Hours</small></label>
                                     <div class="d-flex gap-3 align-items-baseline">
@@ -32,7 +32,7 @@
                         </div>
                         <div class="form-group">
                             <div class="fw-bold">Price</div>
-                            <div class="d-flex gap-5 col-10" >
+                            <div class="d-flex gap-5 col-12 col-sm-10" >
                                 <div>
                                     <label for="euros"><small>Euros</small></label>
                                     <div class="d-flex gap-3 align-items-baseline">

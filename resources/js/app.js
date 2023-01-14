@@ -1,7 +1,8 @@
 import axios from 'axios';
 import 'bootstrap';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-const cartBladeUrl = 'http://localhost/bit/6-rubin/rubin/public/my-order';
+const cartBladeUrl = assetUrl + 'my-order';
+
 const cartUpdate = () => {
     axios.get(showNavCartUrl)
     .then(res =>{
@@ -33,7 +34,9 @@ const cartUpdate = () => {
     msg.innerText = '';
  }
  window.addEventListener('load', () => {
-    cartUpdate();
+    if(document.querySelector('.nav--cart')){
+        cartUpdate();
+    }
     if(document.querySelector('.message--javascript.message')){
         const msg = document.querySelector('.message--javascript');
         msg.classList.remove('message');

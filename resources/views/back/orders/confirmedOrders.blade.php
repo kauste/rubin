@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-12 col-xl-10 mt-5">
+<div class="container col-12 col-xl-10 mt-5 p-0">
     <div class="card border-danger m-xl-3 p-md-3 sort-filter-search">
         @include('parts.sortFilterSearch')
     </div>
-    <div class="card border-danger m-1 m-xl-3 p-3">
+    <div class="card border-danger mt-1 m-xl-3 p-3">
         <h4 class="card-header text-body">
             <b>Booked appointments</b>
         </h4>

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 mt-5">
+<div class="container col-12 col-sm-10 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 mt-5">
     <div class="row">
-        <div class="card border-danger m-3 p-2 p-sm-4">
+        <div class="card border-danger m-0 m-sm-3 p-2 p-sm-4">
             <h4 class="card-header text-body">Edit Salon</h4>
             <div class="card-body text-body">
                 <form class="p-3" method="post" action="{{route('salons-update', $salon)}}">
@@ -41,8 +41,8 @@
                         </div>
                             <div class="form-group">
                                 <label class="fw-bold" for="tel_num">Telephone number</label>
-                                <div class="d-flex" style="column-gap:10px; font-size: 20px;">
-                                    <span>+370</span>
+                                <div class="d-flex align-items-center gap-3" style="font-size: 20px;">
+                                    <span>&plus;370</span>
                                     <input type="text" name="tel_num" class="form-control" id="tel_num" value="{{old('tel_num', $salon->telephone_num)}}">
                                 </div>
                             </div>
