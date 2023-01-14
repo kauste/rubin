@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-10 col-xl-8 mt-5">
+<div class="container col-12 col-sm-10 col-xl-8 mt-5">
     <div class="row">
-        <div class="card border-danger mb-1 m-3 p-3">
+        <div class="card border-danger m-0 m-sm-3 p-0 p-sm-3">
             <h4 class="card-header text-body">
                 <b>Filter</b>
             </h4>
@@ -25,9 +25,9 @@
         </div>
     </div>
 </div>
-<div class="container col-10 col-xl-8 mt-5">
+<div class="container col-12 col-sm-10 col-xl-8 mt-5">
     <div class="row">
-        <div class="card border-danger mb-3 m-3 p-3">
+        <div class="card border-danger mb-3 m-0 m-sm-3 p-0 p-sm-3">
             <h4 class="card-header text-body">
                 <b>Our Lovely Masters</b>
             </h4>
@@ -37,7 +37,7 @@
                     <div class="master-image bg-danger col-12 col-sm-10 col-md-6 col-lg-5 mt-3 mt-md-0">
                         <img src="{{$master->file_path}}" class="card-img-top" alt="{{$master->salon_name}}"></img>
                     </div>
-                    <div class="card-body align-center justify-content-center gap-3 flex-column flex-xl-row col-10 col-sm-6 col-lg-7">
+                    <div class="card-body align-center justify-content-center gap-3 flex-column flex-xl-row col-12 col-sm-10 col-sm-6 col-lg-7">
                         <div class="d-flex flex-column justify-content-center col-12 col-xl-7">
                             <h5 class="card-title text-danger"><b>{{$master->master_name}} {{$master->surname}}</b></h5>
                             <p class="card-text">At the moment is working in <b>{{$master->salon_name}}</b>.</p>

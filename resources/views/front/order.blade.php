@@ -3,9 +3,9 @@
 <script>
  const msg = 'Appointment time is edited.'
 </script>
-<div class="container col-11 col-md-10 col-xl-8 mt-5 cart-blade">
+<div class="container col-12 col-sm-11 col-md-10 col-xl-8 mt-5 cart-blade">
     <div class="row">
-        <div class="card border-danger mb-3 m-3 p-md-3 p-0">
+        <div class="card border-danger m-0 m-sm-3 mb-3 p-0 p-md-3">
             <h4 class="card-header text-body">
                 Your order, dear <b>{{Auth::user()->name}}</b>
             </h4>

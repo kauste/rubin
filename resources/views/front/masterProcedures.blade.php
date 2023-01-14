@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-10 col-xl-9 col-xxl-8 mt-5">
+<div class="container col-12 col-sm-10 col-xl-9 col-xxl-8 mt-5">
     <div class="row">
-        <div class="card border-danger mb-3 m-3 p-3">
+        <div class="card border-danger mb-3 m-0 m-sm-3 p-0 pb-2 p-sm-3">
             <div class="card col-12 flex mb-5">
                 <div class="d-flex flex-column flex-md-row  master--info">
                     <div class="master-image bg-danger col-md-5">

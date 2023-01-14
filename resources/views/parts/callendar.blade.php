@@ -10,7 +10,7 @@
                 <span class="next--month">Next</span>
             </div>
         </div>
-        <div class="card-body align-center callendar-row">
+        <div class="card-body align-center callendar-row p-0 p-sm-2">
             <table class="table table-borderless callendar">
                 <thead>
                     <tr class="w3-theme">

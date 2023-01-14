@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
-<div class="container col-11 col-sm-10 mt-5 order-blade">
+<div class="container col-12 col-sm-11 col-sm-10 mt-5 order-blade">
     <div class="row">
-        <div class="card border-danger mb-3 m-3 p-md-3 p-1 ">
+        <div class="card border-danger mb-3 m-0 m-sm-3 p-0 p-sm-1 p-md-3">
             <h4 class="card-header text-body">
                 Your confirmed orders, dear <b>{{Auth::user()->name}}</b>
             </h4>
