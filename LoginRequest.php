@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 class LoginRequest extends Mailable
 {
     use Queueable, SerializesModels;
-    private $email;
+    private $content;
     /**
      * Create a new message instance.
      *
@@ -19,7 +19,7 @@ class LoginRequest extends Mailable
      */
     public function __construct($email)
     {
-        $this->email = $email;
+        $this->content = $email;
     }
 
     /**
@@ -29,6 +29,10 @@ class LoginRequest extends Mailable
      */
     public function build()
     {
-        return $this->view('email', ['email' => $this->email]);
+        return $this->view('email')
+        ->subject('Get me something')
+        ->with ([
+            'email' => $this->content
+        ]);
     }
 }
