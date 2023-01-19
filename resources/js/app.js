@@ -1,7 +1,7 @@
 import axios from 'axios';
 import 'bootstrap';
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-const cartBladeUrl = assetUrl + 'my-order';
+const cartBladeUrl = assetUrl + '/my-order';
 
 const cartUpdate = () => {
     axios.get(showNavCartUrl)
