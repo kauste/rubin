@@ -104,6 +104,7 @@ const cartUpdate = () => {
     }
 }
  if(document.querySelector('.order--appointments')){
+    console.log( document.querySelector('.order--appointments'));
     document.querySelector('.order--appointments')
     .addEventListener('click', () => {
         const oneAppointment = document.querySelectorAll('.one--appointment');

@@ -40,7 +40,7 @@ Route::get('/hello/{master}', function()
     return View::make('front.comments.index', ['comments'=> Comment::all(), 'master' =>$master]);
 });
 //salonai
-Route::prefix('salons')->name('salons-')->middleware('role:admin')->group(function () {
+Route::prefix('salons')->name('salons-')->middleware(['role:admin'])->group(function () {
     Route::get('/', [SalonController::class, 'index'])->name('index');
     Route::get('/create', [SalonController::class, 'create'])->name('create');
     Route::post('/store', [SalonController::class, 'store'])->name('store');
@@ -49,7 +49,7 @@ Route::prefix('salons')->name('salons-')->middleware('role:admin')->group(functi
     Route::delete('/delete/{salon}', [SalonController::class, 'destroy'])->name('delete');
 });
 //paslaugos
-Route::prefix('services')->name('procedures-')->middleware('role:admin')->group(function () {
+Route::prefix('services')->name('procedures-')->middleware(['role:admin'])->group(function () {
     Route::get('', [ProcedureController::class, 'index'])->name('index');
     Route::get('/create', [ProcedureController::class, 'create'])->name('create');
     Route::post('/store', [ProcedureController::class, 'store'])->name('store');
@@ -58,7 +58,7 @@ Route::prefix('services')->name('procedures-')->middleware('role:admin')->group(
     Route::delete('/delete/{procedure}}', [ProcedureController::class, 'destroy'])->name('delete');
 });
 //meistrai
-Route::prefix('masters')->name('masters-')->middleware('role:admin')->group(function () {
+Route::prefix('masters')->name('masters-')->middleware(['role:admin'])->group(function () {
     Route::get('/', [MasterController::class, 'index'])->name('index');
     Route::get('/create', [MasterController::class, 'create'])->name('create');
     Route::post('/store', [MasterController::class, 'store'])->name('store');
@@ -67,37 +67,44 @@ Route::prefix('masters')->name('masters-')->middleware('role:admin')->group(func
     Route::delete('/delete/{master}}', [MasterController::class, 'destroy'])->name('delete');
 });
 //orderiai
-Route::prefix('back')->name('back-')->middleware('role:admin')->group(function () {
+Route::prefix('back')->name('back-')->middleware(['role:admin'])->group(function () {
     Route::get('confirmed-orders', [ApointmentController::class, 'backConfirmedOrders'])->name('confirmed-orders');
     Route::post('change-state/{id}', [ApointmentController::class, 'backChangeState'])->name('change-state');
     Route::delete('cliend-canceled-seen/{id}', [ApointmentController::class, 'backClientCanceledSeen'])->name('cliend-canceled-seen');
 });
 
 //front
-Route::prefix('front')->name('front-')->middleware('role:user')->group(function () {
+Route::prefix('front')->name('front-')->middleware(['role:user'])->group(function () {
     Route::get('confirmed-orders', [ApointmentController::class, 'confirmedOrders'])->name('confirmed-orders');
+    Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
+    Route::post('rate', [RatingController::class, 'rate'])->name('rate');
+    Route::get('my-order', [ApointmentController::class, 'showMyOrder'])->name('my-order');
+    Route::delete('client-delete-appointment/{id}', [ApointmentController::class, 'clientDeleteAppointment'])->name('client-delete-appointment');
+});
+
+Route::prefix('front')->name('front-')->middleware(['role:user,guest'])->group(function () {            
     Route::get('salons', [FrontController::class, 'salons'])->name('salons');
     Route::get('services', [FrontController::class, 'procedures'])->name('procedures');
     Route::get('masters', [FrontController::class, 'masters'])->name('masters');
     Route::get('salon/masters/{id}', [FrontController::class, 'salonMasters'])->name('salon-masters');
     Route::get('{id}/{date?}', [FrontController::class, 'salonMasterProcedures'])->name('salon-master');
     Route::get('comments/list/{id}', [CommentController::class, 'index'])->name('comments-list');
-    Route::post('comment-store/{id}', [CommentController::class, 'store'])->name('comment-store');
-    Route::post('rate', [RatingController::class, 'rate'])->name('rate');
     Route::post('change-state/{id}', [ApointmentController::class, 'frontChangeState'])->name('change-state');
     Route::delete('changed-state-seen/{id}', [ApointmentController::class, 'frontChangedStateSeen'])->name('changed-state-seen');
 });
-Route::get('my-order', [ApointmentController::class, 'showMyOrder'])->name('my-order');
-Route::delete('client-delete-appointment/{id}', [ApointmentController::class, 'clientDeleteAppointment'])->name('client-delete-appointment');
+
 
 //for javascript
 Route::post('next-month/', [CallendarController::class, 'nextMonth'])->name('next-month');
 Route::post('previous-month/', [CallendarController::class, 'previousMonth'])->name('previous-month');
 Route::post('day', [CallendarController::class, 'showDay'])->name('show-day');
+
+Route::middleware(['role:user'])->group(function () {
 Route::post('add-to-cart', [ApointmentController::class, 'addToCart'])->name('add-to-cart');
 Route::put('update-to-cart', [ApointmentController::class, 'updateToCart'])->name('update-to-cart');
 Route::get('show-nav-cart', [ApointmentController::class, 'showNavCart'])->name('show-nav-cart');
 Route::post('make-order', [ApointmentController::class, 'store'])->name('make-order');
+});
 
 Auth::routes(['register'=>false]);
 // Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('')->middleware('role:user');

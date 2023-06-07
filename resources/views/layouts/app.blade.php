@@ -27,11 +27,12 @@
         const showNavCartUrl = "{{route('show-nav-cart')}}";
         const makeOrderUrl = "{{route('make-order')}}";
         const rateUrl = "{{route('front-rate')}}";
-        const assetUrl = 'http://rugile.website/ruby';
+        const assetUrl = 'https://rugile.website/ruby';
+
     </script>
-    <script src="{{asset('build/assets/app.4d72a196.js?v=3')}}" defer></script>
-    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
-    <link rel="stylesheet" href="{{asset('build/assets/app.6e9e5c56.css?v=4')}}">
+    {{-- <script src="{{asset('build/assets/app.4d72a196.js?v=6')}}" defer></script> --}}
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/app.6e9e5c56.css?v=6')}}"> --}}
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,23 +61,39 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto" style="display:flex; column-gap:20px;">
                         <!-- Authentication Links -->
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
-
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('task') }}">Task</a>
                         </li>
-                        @if(Auth::user()->role > 9)
+                        @guest
+                            <li class="nav-item dropdown ">
+                                <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
+                                    Salons
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('front-procedures')}}">
+                                    Procedures
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link" href="{{route('front-masters')}}">
+                                    Masters
+                                </a>
+                            </li>
+                            @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                            @endif
+
+                            @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            </li>
+                            @endif
+                        @else
+
+                        @if(Auth::user()->role === 10)
                         <li class="nav-item dropdown ">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 Salons
@@ -109,7 +126,7 @@
                                 Appointments
                             </a>
                         </li>
-                        @elseif(Auth::user()->role > 0 && Auth::user()->role < 10) 
+                        @elseif(Auth::user()->role === 1)
                             <li class="nav-item dropdown ">
                                 <a id="navbarDropdown" class="nav-link" href="{{ route('front-salons')}}">
                                     Salons
@@ -154,7 +171,7 @@
                                 {{-- <li>
 
                                 </li> --}}
-                                @endguest
+                        @endguest
                     </ul>
                 </div>
             </div>
